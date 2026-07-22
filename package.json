@@ -1,0 +1,16 @@
+{
+  "name": "claude-mastery",
+  "version": "1.0.0",
+  "description": "Claude Mastery — Zero to Operator. A complete, hands-on, single-page course on Claude: how it works, prompting, the app, Cowork, Claude Code, MCP, the API, agents, and turning the skill into income.",
+  "main": "index.html",
+  "scripts": {
+    "verify": "for f in content/track*.js; do node tools/check_track.js \"$f\"; done",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": ["claude", "anthropic", "course", "ai", "prompting", "mcp", "agents"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}
