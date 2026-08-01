@@ -42,6 +42,16 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 - **Robustness.** A failed content load or a render error now shows a friendly
   "reload" panel instead of a blank white screen.
 - **Performance.** All scripts are deferred so the page paints sooner.
+- **New Track 15 — "Agent Build-Alongs: Ship Agents That Earn."** Six lessons on
+  building money-making agents step by step: the Money-Agent Playbook, four complete
+  build-alongs across distinct revenue models (Inbox & Lead-Triage, Content
+  Repurposing, Research & Intel, Support Deflection/RAG), and a Package-Price-Sell
+  go-to-market lesson. Grounded in the real 2026 stack (Agent SDK, Managed Agents,
+  MCP, tool use). Course is now 94 lessons across 15 tracks.
+- **Growth & credibility.** A shareable **completion certificate** (live PNG from
+  your real progress), **share buttons** on lessons and progress, a downloadable
+  **Prompt Pack** of the course's best prompts, and a **Trust & Method** page
+  (`#trust`) covering authorship, how facts stay current, and local-only data.
 
 ### Verified (checked 2026-08-01 against Anthropic's pages)
 - **Plans:** Free $0 · Pro $20/mo ($17 annual) · Max 5× from $100/mo · Max 20× from

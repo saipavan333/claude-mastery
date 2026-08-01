@@ -265,6 +265,27 @@ textarea{font-family:var(--mono);width:100%}
 .backup .brow{display:flex;flex-wrap:wrap;gap:10px}
 .backup .bmsg{margin-top:10px;font-size:13px;min-height:18px}
 
+/* growth: certificate, share, prompt pack */
+.growth{margin:26px 0 6px;border-radius:var(--r2);border:1px solid var(--line2);padding:16px 18px 18px;
+  background:linear-gradient(180deg,rgba(255,210,77,.07),rgba(20,16,13,0))}
+.growth .bh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.growth .bh b{font-family:var(--disp);font-size:15px;color:var(--gold)}
+.growth .btag{margin-left:auto;font-size:10.5px;letter-spacing:.1em;color:var(--teal);
+  border:1px solid var(--line2);border-radius:6px;padding:2px 7px;white-space:nowrap}
+.growth .bguide{margin:0 0 14px;font-size:13.5px;color:var(--mut);line-height:1.55}
+.growth .brow{display:flex;flex-wrap:wrap;gap:10px}
+.growth .bmsg,.cert-msg{margin-top:10px;font-size:13px;min-height:18px}
+.cert-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 4px}
+.cert-tools label{font-size:13px;color:var(--mut)}
+.cert-tools input{flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;
+  padding:10px 14px;color:var(--ink);font-size:15px;font-family:var(--sans)}
+.cert-tools input:focus{outline:none;border-color:var(--ember)}
+.cert-frame{margin:14px 0;border-radius:var(--r2);overflow:hidden;border:1px solid var(--line2);box-shadow:var(--shadow)}
+.cert-frame canvas{display:block;width:100%;height:auto}
+.side-foot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 8px 2px}
+.side-foot a{font-size:12px;color:var(--mut);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.side-foot a:hover{color:var(--gold);border-color:var(--line2)}
+
 /* living currency engine — verified badge + current-facts page */
 .vbadge{display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--mono);letter-spacing:.02em;
   padding:4px 10px;border-radius:999px;text-decoration:none;white-space:nowrap;

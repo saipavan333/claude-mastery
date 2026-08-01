@@ -7,3 +7,6 @@ package-lock.json
 ROADMAP.md
 video-scripts/
 media/
+
+# build artifact
+tools/_seo_manifest.json

@@ -5,6 +5,7 @@
   "main": "index.html",
   "scripts": {
     "verify": "for f in content/track*.js; do node tools/check_track.js \"$f\"; done",
+    "build": "node tools/build_seo.js",
     "serve": "python3 -m http.server 8080"
   },
   "keywords": ["claude", "anthropic", "course", "ai", "prompting", "mcp", "agents"],
