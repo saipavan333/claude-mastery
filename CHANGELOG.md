@@ -34,6 +34,14 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
   banner, and "★ essential" tags in the track view, so 88 lessons feel finishable.
 - **Milestone celebrations.** One-time toasts for your first lesson, each phase,
   the essential path, streak marks (3/7/30 days), and 25/50/100% completion.
+- **Full-text search.** Ctrl-K (⌘K) now searches the full body of every lesson —
+  not just titles — and shows a highlighted snippet of the match in context.
+- **Accessibility.** Honors `prefers-reduced-motion` (the animated hero and scroll
+  reveals go still), adds a keyboard skip-link, moves focus to the main content on
+  every page change, and labels the search dialog and menu for screen readers.
+- **Robustness.** A failed content load or a render error now shows a friendly
+  "reload" panel instead of a blank white screen.
+- **Performance.** All scripts are deferred so the page paints sooner.
 
 ### Verified (checked 2026-08-01 against Anthropic's pages)
 - **Plans:** Free $0 · Pro $20/mo ($17 annual) · Max 5× from $100/mo · Max 20× from

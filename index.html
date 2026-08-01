@@ -19,43 +19,44 @@
 <meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
-<div id="rbar"><i></i></div>
-<button id="burger" aria-label="Menu">☰</button>
+<a class="skip" id="skiplink" href="#main-content">Skip to content</a>
+<div id="rbar" aria-hidden="true"><i></i></div>
+<button id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="side">☰</button>
 <div id="scrim"></div>
 <div id="app">
-  <aside id="side"></aside>
-  <main id="main"><div id="view"></div></main>
+  <aside id="side" aria-label="Course navigation"></aside>
+  <main id="main"><div id="view" role="main" aria-live="polite"></div></main>
 </div>
-<div id="gtip"></div>
-<div id="pal"><div class="pal-box"><input id="pal-in" placeholder="Search lessons, terms, cheat sheets…  (Esc to close)"><div class="pal-res" id="pal-res"></div></div></div>
+<div id="gtip" aria-hidden="true"></div>
+<div id="pal"><div class="pal-box"><input id="pal-in" placeholder="Search lessons, content, terms…  (Esc to close)"><div class="pal-res" id="pal-res"></div></div></div>
 
-<script src="curriculum.js"></script>
-<script src="content/track01.js"></script>
-<script src="content/track02.js"></script>
-<script src="content/track03.js"></script>
-<script src="content/track04.js"></script>
-<script src="content/track05.js"></script>
-<script src="content/track06.js"></script>
-<script src="content/track07.js"></script>
-<script src="content/track08.js"></script>
-<script src="content/track09.js"></script>
-<script src="content/track10.js"></script>
-<script src="content/track11.js"></script>
-<script src="content/track12.js"></script>
-<script src="content/track13.js"></script>
-<script src="content/track14.js"></script>
-<script src="content/diagrams.js"></script>
-<script src="content/widgets.js"></script>
-<script src="content/glossary.js"></script>
-<script src="content/cheatsheets.js"></script>
-<script src="content/interview.js"></script>
-<script src="content/facts.js"></script>
-<script src="app.js"></script>
+<script defer src="curriculum.js"></script>
+<script defer src="content/track01.js"></script>
+<script defer src="content/track02.js"></script>
+<script defer src="content/track03.js"></script>
+<script defer src="content/track04.js"></script>
+<script defer src="content/track05.js"></script>
+<script defer src="content/track06.js"></script>
+<script defer src="content/track07.js"></script>
+<script defer src="content/track08.js"></script>
+<script defer src="content/track09.js"></script>
+<script defer src="content/track10.js"></script>
+<script defer src="content/track11.js"></script>
+<script defer src="content/track12.js"></script>
+<script defer src="content/track13.js"></script>
+<script defer src="content/track14.js"></script>
+<script defer src="content/diagrams.js"></script>
+<script defer src="content/widgets.js"></script>
+<script defer src="content/glossary.js"></script>
+<script defer src="content/cheatsheets.js"></script>
+<script defer src="content/interview.js"></script>
+<script defer src="content/facts.js"></script>
+<script defer src="app.js"></script>
   <!-- AI course assistant + creator byline (byline-only: the SPA owns its own nav/effects) -->
   <script>window.GDX_BYLINE_ONLY=true;</script>
   <link rel="stylesheet" href="gd-assistant.css">
   <link rel="stylesheet" href="gd-extras.css">
-  <script src="assistant-config.js"></script>
+  <script defer src="assistant-config.js"></script>
   <script defer src="gd-extras.js"></script>
   <script defer src="gd-assistant.js"></script>
 <script>

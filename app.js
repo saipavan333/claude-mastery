@@ -87,6 +87,7 @@ function emberLoom(canvas){
   if(!canvas) return;
   var ctx=canvas.getContext("2d"),W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2);
   var parts=[],threads=[],mouse={x:-9999,y:-9999},raf=null,running=false,t0=0;
+  var reduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var COLS=["#ff8a54","#ffb454","#ffd24d","#ff9d6b","#4fd6b5","#b79cff"];
   function measure(){
     var r=canvas.getBoundingClientRect();
@@ -110,9 +111,8 @@ function emberLoom(canvas){
   }
   function yOf(th,x,t){return th.cy+th.A*Math.sin(th.k*x+th.ph+t*th.sp*1000)}
   function frame(ts){
-    raf=requestAnimationFrame(frame);
-    if(!measure())return;
-    if(!t0)t0=ts;var t=(ts-t0)/1000;
+    if(!measure()){if(running)raf=requestAnimationFrame(frame);return}
+    if(!t0)t0=ts;var t=reduced?0:(ts-t0)/1000;
     ctx.fillStyle="rgba(18,14,11,0.22)";ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation="lighter";
     // faint woven threads
@@ -135,6 +135,7 @@ function emberLoom(canvas){
       ctx.shadowBlur=0;ctx.globalAlpha=1;
     });
     ctx.globalCompositeOperation="source-over";
+    if(running&&!reduced)raf=requestAnimationFrame(frame); else running=false; // reduced-motion: one static frame
   }
   function start(){if(running)return;running=true;t0=0;raf=requestAnimationFrame(frame)}
   function stop(){running=false;if(raf)cancelAnimationFrame(raf);raf=null}
@@ -153,14 +154,18 @@ var heroStop=null;
 var revObs=("IntersectionObserver" in window)?new IntersectionObserver(function(es){
   es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");revObs.unobserve(e.target)}})
 },{threshold:0.06}):null;
-function reveal(root){if(!revObs)return;$$(".rv",root).forEach(function(el){revObs.observe(el)})}
+function reveal(root){
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce||!revObs){$$(".rv",root).forEach(function(el){el.classList.add("in")});return} // show at once, no motion
+  $$(".rv",root).forEach(function(el){revObs.observe(el)});
+}
 
 /* ---------- HOME ---------- */
 function widgetCount(){var c=0;Object.keys(WIDGETS).forEach(function(k){c++});return c}
 function renderHome(){
   if(heroStop){heroStop();heroStop=null}
   var v=$("#view");
-  var h='<section id="hero"><canvas id="loom"></canvas><div class="hero-in">'+
+  var h='<section id="hero"><canvas id="loom" aria-hidden="true"></canvas><div class="hero-in">'+
     '<span class="kicker">Verified against official docs · July 2026</span>'+
     '<h1>Master <span class="gx">Claude</span>.<br>Then get paid for it.</h1>'+
     '<p class="sub">The complete operator’s course: how Claude works, prompting craft, the app, Cowork, Claude Code, MCP, the API, agents — and three full tracks on turning the skill into income. Plain English. Interactive labs. Real 2026 numbers.</p>'+
@@ -833,22 +838,48 @@ function renderStart(){
 }
 
 /* ---------- COMMAND PALETTE ---------- */
+/* full text of a lesson (stripped) for the search index */
+function lessonText(L){
+  if(!L)return "";
+  var p=[L.sub,L.breath,L.hook];
+  (L.secs||[]).forEach(function(s){p.push(s.h,s.b)});
+  if(L.worked)p.push(L.worked.t,L.worked.html);
+  if(L.lab)p.push(L.lab.html,L.lab.expect);
+  (L.mistakes||[]).forEach(function(m){p.push(m)});
+  (L.prac||[]).forEach(function(x){p.push(x.q)});
+  p.push(L.recap,L.review,L.bridge,L.deep);
+  return p.filter(Boolean).join(" · ").replace(/<[^>]+>/g," ").replace(/&[a-z]+;/g," ").replace(/\s+/g," ").trim();
+}
+function snippet(full,q){
+  var lf=full.toLowerCase(),i=lf.indexOf(q);if(i<0)return "";
+  var s=Math.max(0,i-32),e=Math.min(full.length,i+q.length+56);
+  return esc((s>0?"…":"")+full.slice(s,i))+'<mark>'+esc(full.slice(i,i+q.length))+'</mark>'+esc(full.slice(i+q.length,e)+(e<full.length?"…":""));
+}
 function palette(){
   var pal=$("#pal"),inp=$("#pal-in"),res=$("#pal-res"),idx=[],sel=0;
-  FLAT.forEach(function(l){idx.push({t:l.id+" · "+l.title,s:"Track "+l.tn,href:"#lesson/"+l.id})});
-  GLOSSARY.forEach(function(g){idx.push({t:g.t,s:"glossary",href:"#glossary/"+encodeURIComponent(g.t)})});
+  pal.setAttribute("role","dialog");pal.setAttribute("aria-modal","true");pal.setAttribute("aria-label","Search the course");
+  inp.setAttribute("aria-label","Search lessons, content, terms and cheat sheets");
+  res.setAttribute("role","listbox");
+  FLAT.forEach(function(l){var body=lessonText(LESSONS[l.id]);idx.push({t:l.id+" · "+l.title,s:"Track "+l.tn,href:"#lesson/"+l.id,body:body.toLowerCase(),full:body})});
+  GLOSSARY.forEach(function(g){idx.push({t:g.t,s:"glossary",href:"#glossary/"+encodeURIComponent(g.t),body:(g.d||"").toLowerCase(),full:g.d||""})});
   CHEATSHEETS.forEach(function(c){idx.push({t:c.title,s:"cheat sheet",href:"#cheats/"+c.tid})});
   [["Labs hub","#labs"],["Progress","#progress"],["Current facts","#current"],["The essential path","#spine"],["Interview bank","#interview"],["Daily review","#cards"],["Start here","#start"]].forEach(function(x){idx.push({t:x[0],s:"page",href:x[1]})});
   function open(){pal.classList.add("open");inp.value="";draw("");inp.focus()}
   function close(){pal.classList.remove("open")}
   function draw(q){
-    q=q.toLowerCase();sel=0;
-    var out="",n=0;
+    q=(q||"").toLowerCase().trim();sel=0;
+    var titleHits=[],bodyHits=[];
     idx.forEach(function(it){
-      if(n>=14)return;
-      if(!q||it.t.toLowerCase().indexOf(q)>=0){out+='<a class="pal-it'+(n===0?" sel":"")+'" href="'+it.href+'">'+esc(it.t)+'<small>'+esc(it.s)+'</small></a>';n++}
+      if(!q){if(titleHits.length<12)titleHits.push({it:it});return}
+      if(it.t.toLowerCase().indexOf(q)>=0)titleHits.push({it:it});
+      else if(it.body&&it.body.indexOf(q)>=0)bodyHits.push({it:it,snip:snippet(it.full,q)});
     });
-    res.innerHTML=out||'<div class="pal-it">No matches</div>';
+    var all=titleHits.concat(bodyHits).slice(0,16),out="";
+    all.forEach(function(hit,i){
+      out+='<a class="pal-it'+(i===0?" sel":"")+'" href="'+hit.it.href+'" role="option">'+esc(hit.it.t)+
+           (hit.snip?'<span class="pal-snip">'+hit.snip+'</span>':'')+'<small>'+esc(hit.it.s)+'</small></a>';
+    });
+    res.innerHTML=out||'<div class="pal-it pal-none">No matches — try a word from the lesson body.</div>';
   }
   inp.addEventListener("input",function(){draw(inp.value)});
   inp.addEventListener("keydown",function(e){
@@ -885,9 +916,18 @@ document.addEventListener("keydown",function(e){
 });
 
 /* ---------- burger ---------- */
-$("#burger").addEventListener("click",function(){$("#side").classList.toggle("open");$("#scrim").classList.toggle("on")});
-$("#scrim").addEventListener("click",function(){$("#side").classList.remove("open");$("#scrim").classList.remove("on")});
+$("#burger").addEventListener("click",function(){var o=$("#side").classList.toggle("open");$("#scrim").classList.toggle("on");this.setAttribute("aria-expanded",o?"true":"false")});
+$("#scrim").addEventListener("click",function(){$("#side").classList.remove("open");$("#scrim").classList.remove("on");var bg=$("#burger");if(bg)bg.setAttribute("aria-expanded","false")});
+/* skip-link: jump focus to content without triggering the hash router */
+(function(){var sk=$("#skiplink");if(sk)sk.addEventListener("click",function(e){e.preventDefault();var v=$("#view");if(v){v.setAttribute("tabindex","-1");v.focus();try{v.scrollIntoView()}catch(_){}}})})();
 
+/* ---------- error / empty states (never a blank screen) ---------- */
+function renderError(title,msg){
+  var v=$("#view");if(!v)return;
+  v.innerHTML='<div class="wrap"><div class="errbox"><div class="erricon">⚠</div><h1>'+esc(title)+'</h1><p>'+esc(msg)+'</p>'+
+    '<div class="errbtns"><button class="btn pri" id="errReload">↻ Reload</button><a class="btn ghost" href="#home">⌂ Home</a></div></div></div>';
+  var b=$("#errReload");if(b)b.addEventListener("click",function(){location.reload()});
+}
 /* ---------- router ---------- */
 function route(){
   if(window.speechSynthesis)window.speechSynthesis.cancel();
@@ -895,30 +935,44 @@ function route(){
   var h=location.hash||"#home";
   var mm;
   window.scrollTo(0,0);
-  if(h==="#home"||h==="#")renderHome();
-  else if(h==="#start")renderStart();
-  else if(h==="#labs")renderLabs();
-  else if(h==="#progress")renderProgress();
-  else if(h==="#spine")renderSpine();
-  else if(h==="#current")renderCurrent();
-  else if(h==="#interview")renderInterview();
-  else if(h==="#cards")renderCards();
-  else if((mm=h.match(/^#track\/(t\d+)$/)))renderTrack(mm[1]);
-  else if((mm=h.match(/^#lesson\/([\d.]+)$/)))renderLesson(mm[1]);
-  else if((mm=h.match(/^#glossary(?:\/(.*))?$/)))renderGlossary(decodeURIComponent(mm[1]||""));
-  else if((mm=h.match(/^#cheats(?:\/(t\d+))?$/)))renderCheats(mm[1]);
-  else renderHome();
+  try{
+    if(h==="#home"||h==="#")renderHome();
+    else if(h==="#start")renderStart();
+    else if(h==="#labs")renderLabs();
+    else if(h==="#progress")renderProgress();
+    else if(h==="#spine")renderSpine();
+    else if(h==="#current")renderCurrent();
+    else if(h==="#interview")renderInterview();
+    else if(h==="#cards")renderCards();
+    else if((mm=h.match(/^#track\/(t\d+)$/)))renderTrack(mm[1]);
+    else if((mm=h.match(/^#lesson\/([\d.]+)$/)))renderLesson(mm[1]);
+    else if((mm=h.match(/^#glossary(?:\/(.*))?$/)))renderGlossary(decodeURIComponent(mm[1]||""));
+    else if((mm=h.match(/^#cheats(?:\/(t\d+))?$/)))renderCheats(mm[1]);
+    else renderHome();
+  }catch(e){
+    if(window.console&&console.error)console.error("[route]",e);
+    renderError("This page hit a snag","Rendering failed — a reload usually clears it. Your progress is saved safely in this browser.");
+  }
   // active sidebar link
   var tid=null;
   if((mm=h.match(/^#track\/(t\d+)$/)))tid=mm[1];
   if((mm=h.match(/^#lesson\/([\d.]+)$/))){var t=trackOf(mm[1]);if(t)tid=t.id}
   $$(".tlink").forEach(function(a){a.classList.toggle("act",a.getAttribute("data-t")===tid)});
+  // a11y: land focus on the fresh content for keyboard & screen-reader users
+  var mt=$("#view");if(mt){mt.setAttribute("tabindex","-1");try{mt.focus({preventScroll:true})}catch(_){mt.focus()}}
 }
 window.addEventListener("hashchange",route);
 
 /* ---------- boot ---------- */
-renderSide();
-palette();
-route();
-setTimeout(function(){try{maybeCelebrate()}catch(e){}},900); // catch streak/return milestones
+try{
+  if(!FLAT.length){
+    renderError("Course content didn’t load","The lesson data didn’t load — usually a network hiccup or a blocked script. A reload almost always fixes it.");
+  }else{
+    renderSide();palette();route();
+    setTimeout(function(){try{maybeCelebrate()}catch(e){}},900); // catch streak/return milestones
+  }
+}catch(e){
+  if(window.console&&console.error)console.error("[boot]",e);
+  try{renderError("Startup error","The app hit an error while starting up. Reload to try again.")}catch(_){}
+}
 })();
