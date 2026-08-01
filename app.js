@@ -84,13 +84,32 @@ function renderSide(){
   $("#side").innerHTML=h;
 }
 
-/* ---------- Ember Loom hero canvas (self-healing) ---------- */
+/* ---------- Ember Loom hero canvas (self-healing, GPU-cheap) ----------
+   Glow is drawn from pre-rendered per-color sprites (drawImage) instead of
+   per-particle ctx.shadowBlur — the same bloom at a fraction of the cost.
+   The loop pauses when the hero is off-screen or the tab is hidden, and the
+   returned destroy() removes every listener so re-rendering Home leaves no
+   zombie animation loops behind. */
 function emberLoom(canvas){
-  if(!canvas) return;
-  var ctx=canvas.getContext("2d"),W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2);
-  var parts=[],threads=[],mouse={x:-9999,y:-9999},raf=null,running=false,t0=0;
+  if(!canvas) return function(){};
+  var ctx=canvas.getContext("2d");
+  var dpr=Math.min(window.devicePixelRatio||1,1.5);          // decorative canvas → cap backing pixels
+  var W=0,H=0,parts=[],threads=[],sprites={},mouse={x:-9999,y:-9999};
+  var raf=null,running=false,inView=true,dead=false,t0=0,tPrev=0,dirty=true;
   var reduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var COLS=["#ff8a54","#ffb454","#ffd24d","#ff9d6b","#4fd6b5","#b79cff"];
+  var FRAME_MS=1000/45;                                       // gentle drift needs no more than ~45fps
+
+  function hexRGB(c){c=c.replace("#","");return [parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
+  function makeSprite(col){                                   // one soft radial dot per colour, reused for every particle
+    var s=64,oc=document.createElement("canvas");oc.width=oc.height=s;
+    var o=oc.getContext("2d"),rgb=hexRGB(col),base="rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+",";
+    var g=o.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+    g.addColorStop(0,base+"0.85)");g.addColorStop(0.22,base+"0.42)");g.addColorStop(1,base+"0)");
+    o.fillStyle=g;o.fillRect(0,0,s,s);return oc;
+  }
+  COLS.forEach(function(c){sprites[c]=makeSprite(c)});        // sprites are resolution-independent → build once
+
   function measure(){
     var r=canvas.getBoundingClientRect();
     if(r.width<2||r.height<2)return false;
@@ -105,50 +124,75 @@ function emberLoom(canvas){
       threads.push({cy:H*(0.30+0.42*i/(n-1)),A:H*(0.055+0.05*Math.sin(i*2.1)),
         k:(2.2+0.7*(i%3))*Math.PI*2/W,ph:i*1.3,sp:0.00022+0.00007*(i%4),col:COLS[i%COLS.length]});
     }
-    var pn=Math.round(Math.min(150,Math.max(60,W/14)));
+    var cssW=W/dpr,pn=Math.round(Math.min(120,Math.max(50,cssW/12)));
     for(var j=0;j<pn;j++){
       parts.push({th:j%threads.length,x:Math.random()*W,v:(0.6+Math.random()*1.1)*dpr,
         r:(0.9+Math.random()*1.7)*dpr,tw:Math.random()*Math.PI*2});
     }
   }
   function yOf(th,x,t){return th.cy+th.A*Math.sin(th.k*x+th.ph+t*th.sp*1000)}
-  function frame(ts){
-    if(!measure()){if(running)raf=requestAnimationFrame(frame);return}
-    if(!t0)t0=ts;var t=reduced?0:(ts-t0)/1000;
+  function draw(t){
+    ctx.globalCompositeOperation="source-over";
     ctx.fillStyle="rgba(18,14,11,0.22)";ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation="lighter";
     // faint woven threads
-    threads.forEach(function(th,ii){
-      ctx.beginPath();
-      for(var x=0;x<=W;x+=14*dpr){var y=yOf(th,x,t);x===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}
+    for(var ii=0;ii<threads.length;ii++){
+      var th=threads[ii];ctx.beginPath();
+      for(var x=0;x<=W;x+=16*dpr){var y=yOf(th,x,t);x===0?ctx.moveTo(x,y):ctx.lineTo(x,y)}
       ctx.strokeStyle=th.col;ctx.globalAlpha=0.05+0.02*Math.sin(t+ii);ctx.lineWidth=1*dpr;ctx.stroke();
-    });
-    ctx.globalAlpha=1;
-    parts.forEach(function(p){
-      var th=threads[p.th];
-      p.x+=p.v;if(p.x>W+20){p.x=-10;p.th=(p.th+1)%threads.length}
-      var y=yOf(th,p.x,t);
-      var dx=p.x-mouse.x,dy=y-mouse.y,dd=dx*dx+dy*dy,R=90*dpr;
-      if(dd<R*R){var d=Math.sqrt(dd)||1,f=(R-d)/R;y+=dy/d*f*26*dpr;p.x+=dx/d*f*4}
-      var a=0.55+0.45*Math.sin(t*3+p.tw);
-      ctx.beginPath();ctx.arc(p.x,y,p.r,0,7);
-      ctx.fillStyle=th.col;ctx.globalAlpha=0.32*a;
-      ctx.shadowColor=th.col;ctx.shadowBlur=10*dpr;ctx.fill();
-      ctx.shadowBlur=0;ctx.globalAlpha=1;
-    });
-    ctx.globalCompositeOperation="source-over";
-    if(running&&!reduced)raf=requestAnimationFrame(frame); else running=false; // reduced-motion: one static frame
+    }
+    // travelling embers — blit a cached glow sprite, no per-particle blur
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i],pt=threads[p.th];
+      p.x+=p.v;if(p.x>W+20){p.x=-10;p.th=(p.th+1)%threads.length;pt=threads[p.th]}
+      var yy=yOf(pt,p.x,t);
+      var dx=p.x-mouse.x,dy=yy-mouse.y,dd=dx*dx+dy*dy,R=90*dpr;
+      if(dd<R*R){var d=Math.sqrt(dd)||1,f=(R-d)/R;yy+=dy/d*f*26*dpr;p.x+=dx/d*f*4}
+      var a=0.55+0.45*Math.sin(t*3+p.tw),gl=p.r*4.2+4*dpr;
+      ctx.globalAlpha=0.30*a;
+      ctx.drawImage(sprites[pt.col],p.x-gl,yy-gl,gl*2,gl*2);
+    }
+    ctx.globalAlpha=1;ctx.globalCompositeOperation="source-over";
   }
-  function start(){if(running)return;running=true;t0=0;raf=requestAnimationFrame(frame)}
-  function stop(){running=false;if(raf)cancelAnimationFrame(raf);raf=null}
-  canvas.addEventListener("pointermove",function(e){var r=canvas.getBoundingClientRect();
-    mouse.x=(e.clientX-r.left)*dpr;mouse.y=(e.clientY-r.top)*dpr});
-  canvas.addEventListener("pointerleave",function(){mouse.x=-9999;mouse.y=-9999});
-  if(window.ResizeObserver){new ResizeObserver(function(){measure()}).observe(canvas)}
-  window.addEventListener("pageshow",function(){stop();start()});
-  document.addEventListener("visibilitychange",function(){document.hidden?stop():start()});
+  function frame(ts){
+    if(!running){raf=null;return}
+    raf=requestAnimationFrame(frame);
+    if(dirty){if(!measure())return;dirty=false}
+    if(!t0){t0=ts;tPrev=ts}
+    if(!reduced){var el=ts-tPrev;if(el<FRAME_MS)return;tPrev=ts-(el%FRAME_MS)}
+    draw(reduced?0:(ts-t0)/1000);
+    if(reduced){running=false;if(raf){cancelAnimationFrame(raf);raf=null}}   // one static frame, then rest
+  }
+  function start(){if(running||dead)return;running=true;raf=requestAnimationFrame(frame)}
+  function pause(){running=false;if(raf){cancelAnimationFrame(raf);raf=null}}
+  function resume(){if(!dead&&inView&&!document.hidden){dirty=true;start()}}
+
+  var onMove=function(e){var r=canvas.getBoundingClientRect();mouse.x=(e.clientX-r.left)*dpr;mouse.y=(e.clientY-r.top)*dpr};
+  var onLeave=function(){mouse.x=-9999;mouse.y=-9999};
+  canvas.addEventListener("pointermove",onMove);
+  canvas.addEventListener("pointerleave",onLeave);
+
+  var ro=window.ResizeObserver?new ResizeObserver(function(){dirty=true}):null;
+  if(ro)ro.observe(canvas);
+  var io=window.IntersectionObserver?new IntersectionObserver(function(es){
+    inView=es[es.length-1].isIntersecting;inView?resume():pause();
+  },{threshold:0}):null;
+  if(io)io.observe(canvas);
+
+  var onVis=function(){document.hidden?pause():resume()};
+  var onShow=function(){pause();resume()};
+  document.addEventListener("visibilitychange",onVis);
+  window.addEventListener("pageshow",onShow);
+
   start();
-  return stop;
+  return function destroy(){
+    dead=true;pause();
+    canvas.removeEventListener("pointermove",onMove);
+    canvas.removeEventListener("pointerleave",onLeave);
+    if(ro)ro.disconnect();if(io)io.disconnect();
+    document.removeEventListener("visibilitychange",onVis);
+    window.removeEventListener("pageshow",onShow);
+  };
 }
 var heroStop=null;
 
