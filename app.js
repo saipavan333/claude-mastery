@@ -95,9 +95,10 @@ function emberLoom(canvas){
   var ctx=canvas.getContext("2d");
   var dpr=Math.min(window.devicePixelRatio||1,2);            // match the original's crispness
   var W=0,H=0,parts=[],threads=[],sprites={},mouse={x:-9999,y:-9999};
-  var raf=null,running=false,inView=true,dead=false,t0=0,dirty=true;
+  var raf=null,running=false,inView=true,dead=false,t0=0,tPrev=0,dirty=true;
   var reduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var COLS=["#ff8a54","#ffb454","#ffd24d","#ff9d6b","#4fd6b5","#b79cff"];
+  var FLOW=0.35;                                            // ember flow speed (1.0 = original); dt-scaled below, so identical on any refresh rate
 
   function makeSprite(col){
     /* Bake the ORIGINAL glow once: a small disc with shadowBlur — the exact soft, premium
@@ -133,7 +134,7 @@ function emberLoom(canvas){
     }
   }
   function yOf(th,x,t){return th.cy+th.A*Math.sin(th.k*x+th.ph+t*th.sp*1000)}
-  function draw(t){
+  function draw(t,step){
     ctx.globalCompositeOperation="source-over";
     ctx.fillStyle="rgba(18,14,11,0.22)";ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation="lighter";
@@ -146,7 +147,7 @@ function emberLoom(canvas){
     // travelling embers — blit a cached glow sprite, no per-particle blur
     for(var i=0;i<parts.length;i++){
       var p=parts[i],pt=threads[p.th];
-      p.x+=p.v;if(p.x>W+20){p.x=-10;p.th=(p.th+1)%threads.length;pt=threads[p.th]}
+      p.x+=p.v*step*FLOW;if(p.x>W+20){p.x=-10;p.th=(p.th+1)%threads.length;pt=threads[p.th]}
       var yy=yOf(pt,p.x,t);
       var dx=p.x-mouse.x,dy=yy-mouse.y,dd=dx*dx+dy*dy,R=90*dpr;
       if(dd<R*R){var d=Math.sqrt(dd)||1,f=(R-d)/R;yy+=dy/d*f*26*dpr;p.x+=dx/d*f*4}
@@ -160,8 +161,9 @@ function emberLoom(canvas){
     if(!running){raf=null;return}
     raf=requestAnimationFrame(frame);
     if(dirty){if(!measure())return;dirty=false}
-    if(!t0)t0=ts;
-    draw(reduced?0:(ts-t0)/1000);
+    if(!t0){t0=ts;tPrev=ts}
+    var step=Math.min((ts-tPrev)/16.667,3);tPrev=ts;   // frames since last paint (1 at 60fps), clamped after any pause
+    draw(reduced?0:(ts-t0)/1000, step);
     if(reduced){running=false;if(raf){cancelAnimationFrame(raf);raf=null}}   // one static frame, then rest
   }
   function start(){if(running||dead)return;running=true;raf=requestAnimationFrame(frame)}
