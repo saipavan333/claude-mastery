@@ -65,6 +65,12 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
   answer a 6-question sample drawn from across the track; score 80%+ and you can
   mark the whole track complete and skip ahead (missed questions feed your review
   queue, so it stays honest).
+- **Showcase gallery** (`#showcase`) — a curated, static wall of projects people
+  built and shipped after the course. Submissions via a GitHub issue; the owner
+  reviews and adds entries to `content/showcase.js`; the SEO build prerenders a
+  crawlable `showcase.html`. No backend, no login — proof of work as social proof.
+- **Per-lesson OG images.** Every lesson now has its own branded 1200×630 social
+  share card (was per-track).
 
 ### Verified (checked 2026-08-01 against Anthropic's pages)
 - **Plans:** Free $0 · Pro $20/mo ($17 annual) · Max 5× from $100/mo · Max 20× from

@@ -1,6 +1,6 @@
 /* Claude Mastery — service worker. Offline-first app shell + runtime cache.
    Bump CACHE when any precached asset changes so clients pull the new copy. */
-var CACHE = "cm-v10-2026-08-01";
+var CACHE = "cm-v11-2026-08-01";
 
 /* App shell — resolved relative to the SW's location, so subpath hosting
    (e.g. GitHub Pages /claude-mastery/) works without edits. */
@@ -12,7 +12,7 @@ var SHELL = [
   "content/track09.js","content/track10.js","content/track11.js","content/track12.js",
   "content/track13.js","content/track14.js","content/track15.js",
   "content/diagrams.js","content/widgets.js","content/glossary.js",
-  "content/cheatsheets.js","content/interview.js","content/facts.js",
+  "content/cheatsheets.js","content/interview.js","content/facts.js","content/showcase.js",
   "icons/icon-192.png","icons/icon-512.png","icons/maskable-512.png","icons/apple-touch-icon.png",
   "assistant-config.js","gd-assistant.js","gd-extras.js","gd-assistant.css","gd-extras.css","assistant-data.js"
 ];

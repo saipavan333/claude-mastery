@@ -293,6 +293,22 @@ textarea{font-family:var(--mono);width:100%}
 .side-foot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 8px 2px}
 .side-foot a{font-size:12px;color:var(--mut);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:5px 9px}
 .side-foot a:hover{color:var(--gold);border-color:var(--line2)}
+/* showcase gallery */
+.show-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin:16px 0}
+.show-card{border:1px solid var(--line2);border-radius:var(--r2);padding:16px 18px;background:var(--bg2);display:flex;flex-direction:column;gap:8px}
+.show-card.ex{opacity:.82;border-style:dashed}
+.show-card .sc-top{display:flex;align-items:center;gap:8px}
+.show-card .sc-tag{font:600 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--teal);
+  border:1px solid rgba(79,214,181,.35);border-radius:6px;padding:2px 7px}
+.show-card .sc-ex{margin-left:auto;font:600 10px var(--mono);color:var(--dim);border:1px dashed var(--line2);
+  border-radius:6px;padding:1px 6px;text-transform:uppercase}
+.show-card h3{font:700 17px var(--disp);color:var(--ink);margin:2px 0}
+.show-card .sc-blurb{font-size:13.5px;color:var(--mut);line-height:1.55;flex:1}
+.show-card .sc-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:4px;
+  padding-top:10px;border-top:1px solid var(--line)}
+.show-card .sc-name{font-size:12.5px;color:var(--dim)}
+.show-card .sc-link{font:600 12.5px var(--mono);color:var(--gold);text-decoration:none}
+.show-card .sc-link:hover{text-decoration:underline}
 
 /* living currency engine — verified badge + current-facts page */
 .vbadge{display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--mono);letter-spacing:.02em;

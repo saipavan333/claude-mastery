@@ -63,6 +63,7 @@ function renderSide(){
      '<a class="chip" href="#labs">🔬 Labs</a>'+
      '<a class="chip" href="#progress">📈 Progress</a>'+
      '<a class="chip" href="#current">🛡️ Current facts</a>'+
+     '<a class="chip" href="#showcase">🏆 Showcase</a>'+
      '<a class="chip" href="#glossary">📖 Glossary</a>'+
      '<a class="chip" href="#cheats">⚡ Cheat sheets</a>'+
      '<a class="chip" href="#interview">🎤 Interview</a>'+
@@ -78,7 +79,7 @@ function renderSide(){
        '<span class="tbar"><i style="width:'+pct(c,tot)+'%"></i></span></span>'+
        '<span class="phase-tag">'+c+'/'+tot+'</span></a>';
   });
-  h+='<div class="side-foot"><a href="#trust">🛡️ Trust &amp; method</a><a href="#cert">🎓 Certificate</a></div>';
+  h+='<div class="side-foot"><a href="#trust">🛡️ Trust &amp; method</a><a href="#cert">🎓 Certificate</a><a href="#showcase">🏆 Showcase</a></div>';
   h+='<div class="side-h">Built with love · v'+esc(window.COURSE.version)+'</div>';
   $("#side").innerHTML=h;
 }
@@ -983,6 +984,28 @@ function renderTrust(){
   v.innerHTML=h;reveal(v);
 }
 
+/* ---------- SHOWCASE (curated, static, no backend) ---------- */
+function renderShowcase(){
+  var v=$("#view"),list=window.SHOWCASE||[],submit=window.SHOWCASE_SUBMIT||"";
+  var real=list.filter(function(x){return !x.example}),examples=list.filter(function(x){return x.example});
+  var h='<div class="wrap"><div class="page-h"><h1>🏆 Showcase</h1><p>Real things people built and shipped after this course. Finished a capstone or an agent? Add yours — proof of work is how you get hired and win clients.</p></div>';
+  h+='<div class="callout gold"><b>Shipped something?</b> '+(submit?'<a href="'+esc(submit)+'" target="_blank" rel="noopener">Submit your capstone →</a>':'Submissions open soon.')+' It’s curated, so keep it real and include a working link.</div>';
+  if(!real.length)h+='<div class="callout note">No community entries yet — the examples below show the format. Be the first: finish a capstone (Track 14) or a money-agent (Track 15), ship it, and submit it.</div>';
+  h+='<div class="show-grid">';
+  real.concat(examples).forEach(function(e){
+    h+='<div class="show-card'+(e.example?" ex":"")+'">'+
+       '<div class="sc-top"><span class="sc-tag">'+esc(e.tag||"Project")+'</span>'+(e.example?'<span class="sc-ex">example</span>':'')+'</div>'+
+       '<h3>'+esc(e.project||"Untitled")+'</h3>'+
+       '<p class="sc-blurb">'+esc(e.blurb||"")+'</p>'+
+       '<div class="sc-foot"><span class="sc-name">'+esc(e.name||"Anonymous")+'</span>'+
+       (e.url?'<a class="sc-link" href="'+esc(e.url)+'" target="_blank" rel="noopener">View ↗</a>':'')+'</div></div>';
+  });
+  h+='</div>';
+  h+='<div class="callout note" style="margin-top:18px"><b>How it stays real:</b> every entry is reviewed before it appears — a curated wall of genuine, working projects, not an open feed. See <a href="#trust">Trust &amp; method</a>.</div>';
+  h+='</div>';
+  v.innerHTML=h;reveal(v);
+}
+
 /* ---------- CURRENT FACTS (living currency engine) ---------- */
 function renderCurrent(){
   var v=$("#view"),F=window.FACTS;
@@ -1058,7 +1081,7 @@ function palette(){
   FLAT.forEach(function(l){var body=lessonText(LESSONS[l.id]);idx.push({t:l.id+" · "+l.title,s:"Track "+l.tn,href:"#lesson/"+l.id,body:body.toLowerCase(),full:body})});
   GLOSSARY.forEach(function(g){idx.push({t:g.t,s:"glossary",href:"#glossary/"+encodeURIComponent(g.t),body:(g.d||"").toLowerCase(),full:g.d||""})});
   CHEATSHEETS.forEach(function(c){idx.push({t:c.title,s:"cheat sheet",href:"#cheats/"+c.tid})});
-  [["Labs hub","#labs"],["Progress","#progress"],["Current facts","#current"],["The essential path","#spine"],["Interview bank","#interview"],["Daily review","#cards"],["Start here","#start"],["Your certificate","#cert"],["Trust & method","#trust"],["Prompt Pack (download)","#progress"]].forEach(function(x){idx.push({t:x[0],s:"page",href:x[1]})});
+  [["Labs hub","#labs"],["Progress","#progress"],["Current facts","#current"],["The essential path","#spine"],["Interview bank","#interview"],["Daily review","#cards"],["Start here","#start"],["Your certificate","#cert"],["Trust & method","#trust"],["Showcase","#showcase"],["Prompt Pack (download)","#progress"]].forEach(function(x){idx.push({t:x[0],s:"page",href:x[1]})});
   function open(){pal.classList.add("open");inp.value="";draw("");inp.focus()}
   function close(){pal.classList.remove("open")}
   function draw(q){
@@ -1152,6 +1175,7 @@ function route(){
     else if(h==="#spine")renderSpine();
     else if(h==="#cert")renderCert();
     else if(h==="#trust")renderTrust();
+    else if(h==="#showcase")renderShowcase();
     else if(h==="#current")renderCurrent();
     else if(h==="#interview")renderInterview();
     else if(h==="#cards")renderCards();

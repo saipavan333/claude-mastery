@@ -53,8 +53,8 @@ def wrap(draw, text, fnt, maxw):
     if cur: lines.append(cur)
     return lines
 
-def draw_card(title, kicker):
-    img = base_canvas()
+def draw_card(title, kicker, base=None):
+    img = base.copy() if base is not None else base_canvas()
     d = ImageDraw.Draw(img)
     # borders
     d.rounded_rectangle([24,24,W-24,H-24], radius=22, outline=(255,190,140), width=2)
@@ -79,14 +79,15 @@ def draw_card(title, kicker):
 def main():
     with open(os.path.join(HERE, "_seo_manifest.json")) as f:
         man = json.load(f)
-    # default
-    draw_card("Master Claude. Then get paid for it.", "94 lessons · 15 tracks").save(os.path.join(OG, "og-default.png"))
+    base = base_canvas()                      # identical background — compute once, reuse
+    lessons = man.get("lessons", [])
+    draw_card("Master Claude. Then get paid for it.", "%d lessons · the complete course on Claude" % len(lessons), base).save(os.path.join(OG, "og-default.png"))
     n = 1
-    for t in man["tracks"]:
-        kicker = "Track %s · Phase %s" % (t["n"], t.get("phase",""))
-        draw_card(t["title"], kicker).save(os.path.join(OG, "%s.png" % t["tid"]))
+    for L in lessons:
+        kicker = "Lesson %s · Track %s" % (L["id"], L["tn"])
+        draw_card(L["title"], kicker, base).save(os.path.join(OG, "%s.png" % L["id"]))
         n += 1
-    print("Wrote %d OG images -> og/" % n)
+    print("Wrote %d OG images (per lesson + default) -> og/" % n)
 
 if __name__ == "__main__":
     main()
