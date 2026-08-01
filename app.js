@@ -93,20 +93,22 @@ function renderSide(){
 function emberLoom(canvas){
   if(!canvas) return function(){};
   var ctx=canvas.getContext("2d");
-  var dpr=Math.min(window.devicePixelRatio||1,1.5);          // decorative canvas → cap backing pixels
+  var dpr=Math.min(window.devicePixelRatio||1,2);            // match the original's crispness
   var W=0,H=0,parts=[],threads=[],sprites={},mouse={x:-9999,y:-9999};
-  var raf=null,running=false,inView=true,dead=false,t0=0,tPrev=0,dirty=true;
+  var raf=null,running=false,inView=true,dead=false,t0=0,dirty=true;
   var reduced=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var COLS=["#ff8a54","#ffb454","#ffd24d","#ff9d6b","#4fd6b5","#b79cff"];
-  var FRAME_MS=1000/45;                                       // gentle drift needs no more than ~45fps
 
-  function hexRGB(c){c=c.replace("#","");return [parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
-  function makeSprite(col){                                   // one soft radial dot per colour, reused for every particle
-    var s=64,oc=document.createElement("canvas");oc.width=oc.height=s;
-    var o=oc.getContext("2d"),rgb=hexRGB(col),base="rgba("+rgb[0]+","+rgb[1]+","+rgb[2]+",";
-    var g=o.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
-    g.addColorStop(0,base+"0.85)");g.addColorStop(0.22,base+"0.42)");g.addColorStop(1,base+"0)");
-    o.fillStyle=g;o.fillRect(0,0,s,s);return oc;
+  function makeSprite(col){
+    /* Bake the ORIGINAL glow once: a small disc with shadowBlur — the exact soft, premium
+       bloom the old hero had — but the costly blur now runs 6× total (once per colour),
+       never 150× per frame. Runtime just blits this sprite. */
+    var s=96,oc=document.createElement("canvas");oc.width=oc.height=s;
+    var o=oc.getContext("2d");o.translate(s/2,s/2);
+    o.shadowColor=col;o.shadowBlur=10;o.fillStyle=col;
+    o.globalAlpha=0.85;o.beginPath();o.arc(0,0,2.6,0,7);o.fill();
+    o.beginPath();o.arc(0,0,2.6,0,7);o.fill();               // second pass deepens the core, as the old additive frames did
+    return oc;
   }
   COLS.forEach(function(c){sprites[c]=makeSprite(c)});        // sprites are resolution-independent → build once
 
@@ -124,7 +126,7 @@ function emberLoom(canvas){
       threads.push({cy:H*(0.30+0.42*i/(n-1)),A:H*(0.055+0.05*Math.sin(i*2.1)),
         k:(2.2+0.7*(i%3))*Math.PI*2/W,ph:i*1.3,sp:0.00022+0.00007*(i%4),col:COLS[i%COLS.length]});
     }
-    var cssW=W/dpr,pn=Math.round(Math.min(120,Math.max(50,cssW/12)));
+    var cssW=W/dpr,pn=Math.round(Math.min(150,Math.max(60,cssW/10)));
     for(var j=0;j<pn;j++){
       parts.push({th:j%threads.length,x:Math.random()*W,v:(0.6+Math.random()*1.1)*dpr,
         r:(0.9+Math.random()*1.7)*dpr,tw:Math.random()*Math.PI*2});
@@ -148,9 +150,9 @@ function emberLoom(canvas){
       var yy=yOf(pt,p.x,t);
       var dx=p.x-mouse.x,dy=yy-mouse.y,dd=dx*dx+dy*dy,R=90*dpr;
       if(dd<R*R){var d=Math.sqrt(dd)||1,f=(R-d)/R;yy+=dy/d*f*26*dpr;p.x+=dx/d*f*4}
-      var a=0.55+0.45*Math.sin(t*3+p.tw),gl=p.r*4.2+4*dpr;
-      ctx.globalAlpha=0.30*a;
-      ctx.drawImage(sprites[pt.col],p.x-gl,yy-gl,gl*2,gl*2);
+      var a=0.55+0.45*Math.sin(t*3+p.tw),d=96*(p.r/2.6);     // scale the baked sprite to this ember's size
+      ctx.globalAlpha=0.42*a;
+      ctx.drawImage(sprites[pt.col],p.x-d/2,yy-d/2,d,d);
     }
     ctx.globalAlpha=1;ctx.globalCompositeOperation="source-over";
   }
@@ -158,8 +160,7 @@ function emberLoom(canvas){
     if(!running){raf=null;return}
     raf=requestAnimationFrame(frame);
     if(dirty){if(!measure())return;dirty=false}
-    if(!t0){t0=ts;tPrev=ts}
-    if(!reduced){var el=ts-tPrev;if(el<FRAME_MS)return;tPrev=ts-(el%FRAME_MS)}
+    if(!t0)t0=ts;
     draw(reduced?0:(ts-t0)/1000);
     if(reduced){running=false;if(raf){cancelAnimationFrame(raf);raf=null}}   // one static frame, then rest
   }
