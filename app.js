@@ -210,6 +210,8 @@ function renderTrack(tid){
   var h='<div class="wrap"><div class="crumb"><a href="#home">Home</a> › Phase '+t.phase+' · '+esc(ph?ph.name:"")+'</div>'+
     '<div class="page-h"><h1>'+t.icon+'  Track '+t.n+': '+esc(t.title)+' <span class="lvl '+t.level+'">'+t.level+'</span></h1>'+
     '<p>'+esc(t.blurb)+'</p></div>';
+  if(trackDone(t)<t.lessons.length)
+    h+='<div class="testout-cta"><span>Already know this material?</span><a class="btn ghost" href="#testout/'+tid+'">⚡ Test out &amp; skip ahead →</a></div>';
   h+='<div>';
   t.lessons.forEach(function(l,i){
     var done=d[l.id];
@@ -222,6 +224,76 @@ function renderTrack(tid){
   if(cs)h+='<div class="callout tip" style="margin-top:20px"><b>⚡ Track cheat sheet:</b> everything from this track on one card — <a href="#cheats/'+tid+'">open it</a>.</div>';
   h+='</div></div>';
   v.innerHTML=h;reveal(v);
+}
+
+/* ---------- TEST-OUT (adaptivity: prove a track, skip ahead) ---------- */
+var TESTOUT_PASS = 80;
+function testOutPool(tid){
+  var t=TRACKS.find(function(x){return x.id===tid});if(!t)return [];
+  var pool=[];
+  t.lessons.forEach(function(l){var L=LESSONS[l.id];if(L&&L.quiz)L.quiz.forEach(function(q,qi){pool.push({lid:l.id,ltitle:l.title,qi:qi,q:q.q,opts:q.opts,a:q.a,why:q.why})})});
+  return pool;
+}
+function renderTestOut(tid){
+  var v=$("#view"),t=TRACKS.find(function(x){return x.id===tid});if(!t)return renderHome();
+  var pool=testOutPool(tid);
+  if(pool.length<3){v.innerHTML='<div class="wrap"><div class="page-h"><h1>⚡ Test out</h1><p>This track doesn’t have enough questions to test out — just <a href="#track/'+tid+'">work through it</a>.</p></div></div>';return;}
+  var K=Math.min(6,pool.length);
+  // sample K, spread across as many different lessons as possible
+  var byLesson={};pool.forEach(function(p){(byLesson[p.lid]=byLesson[p.lid]||[]).push(p)});
+  var lids=shuffle(Object.keys(byLesson)),picks=[],r=0;
+  while(picks.length<K){var lid=lids[r%lids.length];var arr=byLesson[lid];if(arr&&arr.length)picks.push(arr.splice(Math.floor(arr.length/2),1)[0]);r++;if(r>500)break;}
+  picks=shuffle(picks).slice(0,K);
+  var h='<div class="wrap"><div class="crumb"><a href="#track/'+tid+'">← Track '+t.n+': '+esc(t.title)+'</a></div>'+
+    '<div class="page-h"><h1>⚡ Test out — Track '+t.n+'</h1><p>Already know <b>'+esc(t.title)+'</b>? Answer these '+K+' questions. Score <b>'+TESTOUT_PASS+'%+</b> and you can mark the whole track complete and skip ahead — you can always come back.</p></div>';
+  h+='<div class="callout note"><b>An honest self-check.</b> This is for people who already know the material. If you’re unsure, just do the track — that’s better than testing out of something you half-know.</div>';
+  h+='<div id="toq">';
+  picks.forEach(function(p,i){
+    h+='<div class="qitem toq-item" data-i="'+i+'"><div class="qq">'+(i+1)+'. '+p.q+'</div>';
+    p.opts.forEach(function(o,oi){h+='<button class="qopt toq-opt" data-i="'+i+'" data-o="'+oi+'">'+o+'</button>';});
+    h+='<div class="qwhy toq-why" data-i="'+i+'"></div><div class="toq-src"></div></div>';
+  });
+  h+='</div>';
+  h+='<div class="to-actions"><button class="btn pri" id="toSubmit">Submit answers</button><span class="to-msg" id="toMsg"></span></div></div>';
+  v.innerHTML=h;reveal(v);
+  var sel={};
+  $$(".toq-opt",v).forEach(function(b){b.addEventListener("click",function(){
+    var i=b.getAttribute("data-i");
+    $$('.toq-opt[data-i="'+i+'"]',v).forEach(function(x){x.classList.remove("sel")});
+    b.classList.add("sel");sel[i]=+b.getAttribute("data-o");
+  });});
+  $("#toSubmit").addEventListener("click",function(){
+    if(Object.keys(sel).length<K){$("#toMsg").innerHTML="<span style='color:var(--gold)'>Answer all "+K+" questions first.</span>";return;}
+    var correct=0,missed=[];
+    picks.forEach(function(p,i){
+      var chosen=sel[i],qi=$('.toq-item[data-i="'+i+'"]',v);
+      $$('.toq-opt[data-i="'+i+'"]',v).forEach(function(x,oi){x.disabled=true;if(oi===p.a)x.classList.add("right");else if(oi===chosen)x.classList.add("wrong");});
+      if(chosen===p.a)correct++;
+      else{missed.push(p);var wc=$('.toq-why[data-i="'+i+'"]',qi);if(wc){wc.innerHTML=(p.why&&p.why[p.a])||"";wc.classList.add("show");}var sc=$('.toq-src',qi);if(sc)sc.innerHTML='from <a href="#lesson/'+p.lid+'">'+p.lid+' · '+esc(p.ltitle)+'</a>';}
+    });
+    var score=Math.round(100*correct/K);this.disabled=true;
+    missed.forEach(function(p){try{srsSeedDue("Q"+p.lid+"_"+p.qi)}catch(e){}});
+    var box=document.createElement("div");box.style.marginTop="16px";
+    if(score>=TESTOUT_PASS){
+      $("#toMsg").innerHTML="";box.className="callout gold";
+      box.innerHTML="<b>✓ Passed — "+correct+"/"+K+" ("+score+"%).</b> You clearly know this track. Mark it complete and jump ahead?<div style='margin-top:12px'><button class='btn pri' id='toMark'>✓ Mark Track "+t.n+" complete (tested out)</button> <a class='btn ghost' href='#track/"+tid+"'>Review the lessons instead</a></div>";
+      $(".wrap").appendChild(box);
+      $("#toMark").addEventListener("click",function(){
+        var d=doneSet();t.lessons.forEach(function(l){d[l.id]=1});LSset("done",d);
+        var to=LSget("testout",{});to[tid]=score;LSset("testout",to);logStudyDay();renderSide();
+        this.textContent="✓ Track "+t.n+" marked complete";this.disabled=true;
+        try{maybeCelebrate()}catch(e){}
+        var nx=TRACKS[TRACKS.indexOf(t)+1];
+        var p=document.createElement("p");p.style.marginTop="10px";
+        p.innerHTML="Done — Track "+t.n+" is marked complete. "+(nx?"Next: <a href='#track/"+nx.id+"'>Track "+nx.n+" · "+esc(nx.title)+"</a>":"That was the last track.");
+        box.appendChild(p);
+      });
+    }else{
+      box.className="callout warn";
+      box.innerHTML="<b>"+correct+"/"+K+" ("+score+"%) — not a pass (you need "+TESTOUT_PASS+"%).</b> Useful signal: there’s real value here for you. The ones you missed are now in your <a href='#cards'>review queue</a>. Start with <a href='#lesson/"+t.lessons[0].id+"'>"+t.lessons[0].id+" · "+esc(t.lessons[0].title)+"</a>.";
+      $(".wrap").appendChild(box);renderSide();
+    }
+  });
 }
 
 /* ---------- LESSON ---------- */
@@ -1084,6 +1156,7 @@ function route(){
     else if(h==="#interview")renderInterview();
     else if(h==="#cards")renderCards();
     else if((mm=h.match(/^#track\/(t\d+)$/)))renderTrack(mm[1]);
+    else if((mm=h.match(/^#testout\/(t\d+)$/)))renderTestOut(mm[1]);
     else if((mm=h.match(/^#lesson\/([\d.]+)$/)))renderLesson(mm[1]);
     else if((mm=h.match(/^#glossary(?:\/(.*))?$/)))renderGlossary(decodeURIComponent(mm[1]||""));
     else if((mm=h.match(/^#cheats(?:\/(t\d+))?$/)))renderCheats(mm[1]);

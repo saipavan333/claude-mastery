@@ -61,6 +61,10 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
   queue (closing the quiz → review loop); each lab's "you'll know it worked
   when…" is behind a *try-first, then reveal* gate for active recall; and you can
   swipe between lessons on mobile.
+- **Test out (adaptivity).** Each track offers a "⚡ Test out" diagnostic —
+  answer a 6-question sample drawn from across the track; score 80%+ and you can
+  mark the whole track complete and skip ahead (missed questions feed your review
+  queue, so it stays honest).
 
 ### Verified (checked 2026-08-01 against Anthropic's pages)
 - **Plans:** Free $0 · Pro $20/mo ($17 annual) · Max 5× from $100/mo · Max 20× from
