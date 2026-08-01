@@ -287,7 +287,7 @@ function renderLesson(id){
        '<div class="wbody"><p class="wguide">'+ (W.guide||"") +'</p><div id="wroot"></div>'+(W.note?'<p class="wnote">'+W.note+'</p>':'')+'</div></div>';
   if(L.worked)h+='<div class="worked rv"><div class="wkh">'+esc(L.worked.t||"Worked example — narrated")+'</div><div class="wkb">'+L.worked.html+'</div></div>';
   if(L.lab)h+='<div class="dolab rv"><div class="dh"><b>🛠 Do it for real</b><span class="where">'+esc(L.lab.where||"Claude")+'</span></div>'+
-       '<div class="db">'+L.lab.html+(L.lab.expect?'<div class="expect"><b>You’ll know it worked when:</b> '+L.lab.expect+'</div>':'')+'</div></div>';
+       '<div class="db">'+L.lab.html+(L.lab.expect?'<details class="expect-d"><summary>🎯 Try it first — then reveal what a strong result looks like</summary><div class="expect"><b>You’ll know it worked when:</b> '+L.lab.expect+'</div></details>':'')+'</div></div>';
   if(L.lab)h+=coachBlock(L,meta);
   if(L.mistakes&&L.mistakes.length){h+='<div class="mist rv"><div class="mh">Where people go wrong</div><ul>';
     L.mistakes.forEach(function(m){h+='<li>'+m+'</li>'});h+='</ul></div>'}
@@ -316,7 +316,7 @@ function renderLesson(id){
   h+='</article></div><div id="ra-float"><button class="btn ghost" id="raBtn">🔊 Listen</button></div>';
   v.innerHTML=h;
   // wire quiz
-  var answered={},correct=0,total=(L.quiz||[]).length;
+  var answered={},correct=0,total=(L.quiz||[]).length,missed=0;
   $$(".qitem",v).forEach(function(qi){
     var qn=+qi.getAttribute("data-q"),q=L.quiz[qn];
     $$(".qopt",qi).forEach(function(btn){
@@ -328,11 +328,15 @@ function renderLesson(id){
           else if(bi===oi)b.classList.add("wrong");
         });
         var wc=$('.qwhy[data-w="'+q.a+'"]',qi);if(wc)wc.classList.add("show");
-        if(oi!==q.a){var ww=$('.qwhy[data-w="'+oi+'"]',qi);if(ww)ww.classList.add("show")}
+        if(oi!==q.a){var ww=$('.qwhy[data-w="'+oi+'"]',qi);if(ww)ww.classList.add("show");
+          missed++;try{srsSeedDue("Q"+id+"_"+qn)}catch(e){} } // miss → resurface in spaced review
         else correct++;
         if(Object.keys(answered).length===total){
-          var sc=$("#qscore");if(sc)sc.innerHTML="Score: <b>"+correct+"/"+total+"</b>"+(correct===total?" — flawless. 🏅":" — re-read the “why” notes above, they’re the real lesson.");
+          var sc=$("#qscore");if(sc)sc.innerHTML="Score: <b>"+correct+"/"+total+"</b>"+
+            (correct===total?" — flawless. 🏅":" — re-read the “why” notes above, they’re the real lesson.")+
+            (missed?' · <a href="#cards">↻ '+missed+' added to your review queue</a>':"");
           var m=LSget("quiz",{});var best=Math.max(m[id]||0,Math.round(100*correct/total));m[id]=best;LSset("quiz",m);
+          if(missed)renderSide(); // refresh the due-count badge
         }
       });
     });
@@ -548,6 +552,7 @@ function renderInterview(){
 var SRS_NEW_PER_DAY=12, DAY=864e5;
 function srsState(){return LSget("cards",{})}
 function srsSaveState(st){LSset("cards",st)}
+function srsSeedDue(cid){var st=srsState();st[cid]=srsUpdate(st[cid],"again");srsSaveState(st);} // resurface a missed concept ASAP
 function srsNorm(s){ // normalise, migrating old {box,due} records
   if(!s)return null;
   if(s.ef==null){var box=s.box||0;return {ef:2.5,reps:box,ivl:[1,3,7,21,60][box]||1,due:s.due||Date.now(),seen:true}}
@@ -1032,6 +1037,20 @@ document.addEventListener("keydown",function(e){
   if(e.key==="ArrowRight"&&FLAT[i+1])location.hash="#lesson/"+FLAT[i+1].id;
   if(e.key==="ArrowLeft"&&FLAT[i-1])location.hash="#lesson/"+FLAT[i-1].id;
 });
+/* touch-swipe between lessons on mobile (ignores code blocks, widgets, inputs) */
+(function(){var x0=0,y0=0,ts=0;
+  document.addEventListener("touchstart",function(e){if(e.touches.length!==1)return;var t=e.touches[0];x0=t.clientX;y0=t.clientY;ts=Date.now();},{passive:true});
+  document.addEventListener("touchend",function(e){
+    var m=location.hash.match(/^#lesson\/(.+)$/);if(!m||!e.changedTouches||!e.changedTouches.length)return;
+    var t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+    if(Date.now()-ts>600||Math.abs(dx)<64||Math.abs(dx)<1.8*Math.abs(dy))return;
+    for(var el=e.target;el&&el!==document.body;el=el.parentNode){var tg=el.tagName;
+      if(tg==="PRE"||tg==="INPUT"||tg==="TEXTAREA"||tg==="CANVAS"||(typeof el.className==="string"&&/widget|wroot/.test(el.className)))return;}
+    var i=lessonIndex(m[1]);
+    if(dx<0&&FLAT[i+1])location.hash="#lesson/"+FLAT[i+1].id;
+    else if(dx>0&&FLAT[i-1])location.hash="#lesson/"+FLAT[i-1].id;
+  },{passive:true});
+})();
 
 /* ---------- burger ---------- */
 $("#burger").addEventListener("click",function(){var o=$("#side").classList.toggle("open");$("#scrim").classList.toggle("on");this.setAttribute("aria-expanded",o?"true":"false")});

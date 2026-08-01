@@ -52,6 +52,15 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
   your real progress), **share buttons** on lessons and progress, a downloadable
   **Prompt Pack** of the course's best prompts, and a **Trust & Method** page
   (`#trust`) covering authorship, how facts stay current, and local-only data.
+- **SEO / discoverability.** Homepage now emits Open Graph, Twitter Card, and
+  Course JSON-LD. A `npm run build` step (`tools/build_seo.js`) prerenders a
+  crawlable static page per lesson (real text + canonical + per-lesson OG +
+  LearningResource/BreadcrumbList structured data, redirecting humans into the
+  app), a `sitemap.xml`, `robots.txt`, and branded 1200×630 share images.
+- **Deeper learning.** Missed quiz questions now auto-seed the spaced-review
+  queue (closing the quiz → review loop); each lab's "you'll know it worked
+  when…" is behind a *try-first, then reveal* gate for active recall; and you can
+  swipe between lessons on mobile.
 
 ### Verified (checked 2026-08-01 against Anthropic's pages)
 - **Plans:** Free $0 · Pro $20/mo ($17 annual) · Max 5× from $100/mo · Max 20× from

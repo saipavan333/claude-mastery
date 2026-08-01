@@ -240,6 +240,14 @@ textarea{font-family:var(--mono);width:100%}
 .dolab .expect{margin-top:10px;padding:10px 14px;border-radius:10px;background:rgba(79,214,181,.07);
   font-size:13.5px;color:var(--mut)}
 .dolab .expect b{color:var(--teal)}
+.dolab .expect-d{margin-top:12px}
+.dolab .expect-d>summary{cursor:pointer;list-style:none;color:var(--teal);font:600 13px var(--sans);
+  padding:8px 13px;border:1px dashed var(--line2);border-radius:10px;display:inline-block;transition:border-color .12s}
+.dolab .expect-d>summary::-webkit-details-marker{display:none}
+.dolab .expect-d>summary::marker{content:""}
+.dolab .expect-d>summary:hover{border-color:var(--teal)}
+.dolab .expect-d[open]>summary{border-style:solid;color:var(--mut);margin-bottom:2px}
+.dolab .expect-d[open]>summary::before{content:"✓ "}
 
 /* AI coach / grader loop */
 .coach{margin:20px 0 24px;border-radius:var(--r2);border:1px solid var(--line2);overflow:hidden;
