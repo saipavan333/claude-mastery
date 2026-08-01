@@ -10,6 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23ff8a54'/><text x='50' y='68' font-size='52' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%23241206'>C</text></svg>">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#14100d">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Claude Mastery">
+<meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
 <div id="rbar"><i></i></div>
@@ -42,6 +49,7 @@
 <script src="content/glossary.js"></script>
 <script src="content/cheatsheets.js"></script>
 <script src="content/interview.js"></script>
+<script src="content/facts.js"></script>
 <script src="app.js"></script>
   <!-- AI course assistant + creator byline (byline-only: the SPA owns its own nav/effects) -->
   <script>window.GDX_BYLINE_ONLY=true;</script>
@@ -50,5 +58,13 @@
   <script src="assistant-config.js"></script>
   <script defer src="gd-extras.js"></script>
   <script defer src="gd-assistant.js"></script>
+<script>
+/* PWA: register the service worker for offline + installability. Never fatal. */
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  });
+}
+</script>
 </body>
 </html>

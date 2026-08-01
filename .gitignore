@@ -2,3 +2,8 @@ node_modules/
 package-lock.json
 *.log
 .DS_Store
+
+# internal / production assets — kept private, not deployed
+ROADMAP.md
+video-scripts/
+media/

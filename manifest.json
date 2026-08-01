@@ -1,0 +1,20 @@
+{
+  "name": "Claude Mastery — Zero to Operator",
+  "short_name": "Claude Mastery",
+  "description": "The complete, hands-on course on Claude: how it works, prompting mastery, the app, Cowork, Claude Code, MCP, the API, agents — and how to turn the skill into real income.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": ".",
+  "scope": ".",
+  "id": "/claude-mastery/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#14100d",
+  "background_color": "#14100d",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

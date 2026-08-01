@@ -1,0 +1,93 @@
+name: Currency check
+
+# Keeps the course honest: once a month, flag any fact in content/facts.js that
+# has passed its review window, and open/update a tracking issue. Also does a
+# best-effort reachability check of the official source pages. Runs only after
+# you've pushed this repo to GitHub (Actions enabled). Trigger manually anytime
+# from the Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: "0 9 1 * *"   # 09:00 UTC on the 1st of each month
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Audit fact staleness + sources
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const vm = require('vm');
+
+            // Load content/facts.js the same way the browser does (window shim).
+            const ctx = { window: {} };
+            vm.createContext(ctx);
+            vm.runInContext(fs.readFileSync('content/facts.js', 'utf8'), ctx);
+            const F = ctx.window.FACTS;
+            if (!F) { core.setFailed('content/facts.js did not define window.FACTS'); return; }
+
+            const now = new Date();
+            const today = now.toISOString().slice(0, 10);
+            const win = F.staleDays || 120;
+            const ageOf = d => d ? Math.round((now - new Date(d + 'T00:00:00')) / 86400000) : null;
+
+            // Which facts are past the window?
+            const stale = [];
+            (F.groups || []).forEach(g => (g.items || []).forEach(it => {
+              const d = it.asOf || F.reviewed;
+              const n = ageOf(d);
+              if (n != null && n > win) stale.push({ group: g.title, label: it.label, value: it.value, asOf: d, age: n });
+            }));
+
+            // Best-effort: are the source pages still reachable?
+            const reach = [];
+            for (const [k, u] of Object.entries(F.sources || {})) {
+              try {
+                let r = await fetch(u, { method: 'HEAD', redirect: 'follow' });
+                if (!r.ok) r = await fetch(u, { method: 'GET', redirect: 'follow' });
+                reach.push(`${r.ok ? '✅' : '⚠️ ' + r.status} \`${k}\` — ${u}`);
+              } catch (e) {
+                reach.push(`❌ \`${k}\` — ${u} (${e.message})`);
+              }
+            }
+
+            // Build the report.
+            let body = `## 🛡️ Currency check — ${today}\n\n`;
+            body += `\`content/facts.js\` last full review: **${F.reviewed}** (${ageOf(F.reviewed)} days ago). Review window: **${win} days**.\n\n`;
+            if (stale.length) {
+              body += `### ⚠️ ${stale.length} fact(s) past the review window\n\n`;
+              body += `| Group | Fact | Value | As of | Age (days) |\n|---|---|---|---|---|\n`;
+              stale.forEach(s => { body += `| ${s.group} | ${s.label} | ${s.value} | ${s.asOf} | ${s.age} |\n`; });
+            } else {
+              body += `### ✅ All facts within the ${win}-day review window.\n`;
+            }
+            body += `\n### Source reachability\n${reach.map(r => `- ${r}`).join('\n')}\n`;
+            body += `\n> To resolve: re-verify each flagged fact on its source page, bump its \`asOf\` in \`content/facts.js\`, add a line to \`CHANGELOG.md\`, and commit. This issue closes automatically once nothing is stale.\n`;
+
+            await core.summary.addRaw(body).write();
+
+            // Open / update / close a single tracking issue labelled "currency".
+            const { owner, repo } = context.repo;
+            const title = '🛡️ Currency review due';
+            const open = (await github.rest.issues.listForRepo({ owner, repo, state: 'open', labels: 'currency', per_page: 1 })).data[0];
+
+            if (stale.length) {
+              if (open) {
+                await github.rest.issues.update({ owner, repo, issue_number: open.number, body });
+              } else {
+                try { await github.rest.issues.createLabel({ owner, repo, name: 'currency', color: 'ffd24d' }); } catch (e) {}
+                await github.rest.issues.create({ owner, repo, title, body, labels: ['currency'] });
+              }
+            } else if (open) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: open.number, body: `✅ All facts back within the review window as of ${today}. Closing.` });
+              await github.rest.issues.update({ owner, repo, issue_number: open.number, state: 'closed' });
+            }
