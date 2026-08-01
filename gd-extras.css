@@ -31,7 +31,7 @@
 @media(max-width:1024px){.gdx-headcredit{display:none}}   /* keep the bar uncluttered on small screens; the footer still credits */
 
 /* ---- creator byline for sidebar-only courses: a small line under the brand / at top of the rail ---- */
-.gdx-sidecredit{margin:12px 12px 4px;padding:11px 4px 2px;border-top:1px solid rgba(148,163,184,.20);font:600 10.5px/1.6 system-ui,-apple-system,sans-serif;color:inherit;opacity:.9;text-align:center}
+.gdx-sidecredit{margin:10px 12px 16px;padding:12px 4px 4px;border-top:1px solid rgba(148,163,184,.20);font:600 10.5px/1.6 system-ui,-apple-system,sans-serif;color:inherit;opacity:.9;text-align:center}
 .gdx-sidecredit .gdx-sig{display:block}
 .gdx-sidecredit .gdx-sig::before{content:"\2726\00A0"}
 .gdx-sidecredit .gdx-sig::after{content:"\00A0\2726"}
