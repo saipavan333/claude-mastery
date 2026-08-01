@@ -186,5 +186,16 @@ window.TRACKS = [
       { id: "14.3", title: "Capstone C: MCP Server + Code Workflow", min: 30 },
       { id: "14.4", title: "Capstone D: Deployable API Micro-Product", min: 30 },
       { id: "14.5", title: "Capstone E: Your 30-Day Income Launch", min: 20 }
+    ]},
+  { id: "t15", n: 15, phase: "E", icon: "🛠", level: "L3",
+    title: "Agent Build-Alongs: Ship Agents That Earn",
+    blurb: "Step-by-step builds of money-making agents: a reusable playbook, then complete build-alongs across distinct revenue models — inbox triage, content repurposing, scheduled research, docs-answering support — and how to package, price, and sell them.",
+    lessons: [
+      { id: "15.1", title: "The Money-Agent Playbook", min: 16 },
+      { id: "15.2", title: "Build-Along: The Inbox & Lead-Triage Agent", min: 20 },
+      { id: "15.3", title: "Build-Along: The Content Repurposing Agent", min: 20 },
+      { id: "15.4", title: "Build-Along: The Research & Intel Agent", min: 20 },
+      { id: "15.5", title: "Build-Along: The Support Deflection Agent", min: 22 },
+      { id: "15.6", title: "Package, Price & Sell Your Agents", min: 18 }
     ]}
 ];
