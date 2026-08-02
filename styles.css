@@ -60,7 +60,9 @@ img,svg,canvas{max-width:100%}
 #scrim.on{opacity:1;pointer-events:auto}
 
 /* ============================= SIDEBAR ============================= */
-.brand{display:flex;align-items:center;gap:12px;padding:6px 8px 14px}
+.brand{display:flex;align-items:center;gap:12px;padding:6px 8px 14px;text-decoration:none;color:inherit;cursor:pointer;border-radius:12px;transition:opacity .14s ease}
+.brand:hover{opacity:.9}
+.brand:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .brand .mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
   background:var(--brand);color:#241206;font:800 20px var(--disp);
   box-shadow:0 6px 22px -6px rgba(255,150,80,.55);animation:markGlow 4s ease-in-out infinite}

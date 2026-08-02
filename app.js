@@ -54,7 +54,7 @@ function streak(){var days=LSget("days",[]);if(!days.length)return 0;var set={},
 /* ---------- sidebar ---------- */
 function renderSide(){
   var d=doneSet();
-  var h='<div class="brand"><div class="mark">C</div><div><b>Claude Mastery</b><small>Zero → Operator</small></div></div>';
+  var h='<a class="brand" href="#home" aria-label="Claude Mastery — go to home"><div class="mark" aria-hidden="true">C</div><div><b>Claude Mastery</b><small>Zero → Operator</small></div></a>';
   var dueN=srsDueCount();
   h+='<div class="chips">'+
      '<a class="chip" href="#home">⌂ Home</a>'+
