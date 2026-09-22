@@ -9,6 +9,30 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## 2026-09-22
+
+### Verified (checked 2026-09-22 against Anthropic's own pages)
+- **Frontier models:** Claude **Opus 5** (`claude-opus-5`, $5/$25 per MTok) is the default
+  "start here" flagship (released 2026-07-24); **Fable 5.1** (`claude-fable-5-1`, $10/$50) and
+  its trusted-access sibling **Mythos 5.1** are the premium top tier (released 2026-09-01);
+  **Sonnet 5** (`claude-sonnet-5`) is now **$2/$10** (the old intro price is standard);
+  **Haiku 4.5** ($1/$5). Frontier models are 1M context / 128k output; Haiku 4.5 is 200k.
+- **Plans unchanged:** Free $0 · Pro $20 ($17 annual) · Max 5×/20× from $100/$200 · Team
+  $25/seat ($20 annual), premium seat $125 ($100) · Enterprise $20/seat.
+- Corrected the model-family lesson (1.3): Opus 5 is the flagship, Fable 5.1 the premium
+  escalation; retired "Opus 4.8" as a current model. Re-dated every "as of July 2026"
+  snapshot to September 2026. Course version → 1.1.
+
+### Added
+- **New Track 16 — "The 2026 Frontier: New Powers & Build-Alongs"** (6 lessons). The course
+  is now **100 lessons across 16 tracks**. It covers the merged Cowork + chat app with Claude
+  **Docs & Slides**; the rebuilt **Projects** (parallel threads, shared memory, libraries);
+  **Claude in Chrome** (GA); and two hands-on build-alongs — shipping an Agent **Skill**
+  (Skills API) and a **document-intelligence agent** (Files API) — capped by a "sell a
+  vertical" lesson grounded in the 2026 industry-plugin wave (Salesforce, financial advisors,
+  small business, teachers).
+- Regenerated all prerendered SEO pages, per-lesson OG images, and the sitemap for 100 lessons.
+
 ## 2026-08-01
 
 ### Added

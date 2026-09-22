@@ -197,5 +197,16 @@ window.TRACKS = [
       { id: "15.4", title: "Build-Along: The Research & Intel Agent", min: 20 },
       { id: "15.5", title: "Build-Along: The Support Deflection Agent", min: 22 },
       { id: "15.6", title: "Package, Price & Sell Your Agents", min: 18 }
+    ]},
+  { id: "t16", n: 16, phase: "E", icon: "◆", level: "L3",
+    title: "The 2026 Frontier: New Powers & Build-Alongs",
+    blurb: "The newest Claude surfaces and APIs, hands-on: the merged Cowork+chat app with Docs & Slides, the rebuilt Projects, and Claude in Chrome GA — then build-alongs that ship an Agent Skill and a document-intelligence agent, and turn it all into a sellable vertical.",
+    lessons: [
+      { id: "16.1", title: "One App: Cowork, Chat, Docs & Slides", min: 14 },
+      { id: "16.2", title: "Projects, Rebuilt: Parallel Threads & Shared Memory", min: 15 },
+      { id: "16.3", title: "Claude in Chrome, GA: The Autonomous Browser", min: 15 },
+      { id: "16.4", title: "Build-Along: Ship a Skill (Skills API)", min: 20 },
+      { id: "16.5", title: "Build-Along: The Document-Intelligence Agent (Files API)", min: 22 },
+      { id: "16.6", title: "Sell a Vertical: Industry Plugins & the Packaged Agent", min: 18 }
     ]}
 ];

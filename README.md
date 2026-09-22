@@ -6,7 +6,7 @@ It is a single-page web app with **no build step and no dependencies**. Open it 
 
 ## What is inside
 
-- **88 lessons** across **14 tracks** and **5 phases** (Foundations → The Craft → Power User → Builder → Operator).
+- **100 lessons** across **16 tracks** and **5 phases** (Foundations → The Craft → Power User → Builder → Operator).
 - **6 interactive labs** — a temperature sampler, a tokenizer, a model chooser, a unit-economics/caching calculator, an agent-loop stepper, and a pricing comparator. You move the levers yourself.
 - **15 inline diagrams** — next-token prediction, the context window, the model family, the agent loop, MCP wiring, the lethal trifecta, tool-use, caching economics, and more.
 - **215-term glossary** that also powers the dotted-underline **tooltips** inside every lesson (first occurrence of each term is linked automatically).
@@ -43,7 +43,7 @@ curriculum.js         # single source of truth: phases, tracks, lesson list, PB(
 app.js                # the engine: router, sidebar, hero animation, lesson renderer,
                        # quiz, tooltips, flashcards, read-aloud, search, progress
 content/
-  track01..track14.js # the 88 lessons (one file per track)
+  track01..track16.js # the 100 lessons (one file per track)
   diagrams.js         # inline SVG diagrams, keyed by lesson id
   widgets.js          # interactive labs, keyed by lesson id
   glossary.js         # 215 terms (definitions + tooltip source)
