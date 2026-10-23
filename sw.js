@@ -1,6 +1,6 @@
 /* Claude Mastery — service worker. Offline-first app shell + runtime cache.
    Bump CACHE when any precached asset changes so clients pull the new copy. */
-var CACHE = "cm-v18-2026-09-22";
+var CACHE = "cm-v19-2026-10-23";
 
 /* App shell — resolved relative to the SW's location, so subpath hosting
    (e.g. GitHub Pages /claude-mastery/) works without edits. */

@@ -3,8 +3,8 @@
    curriculum.js — the dependency-ordered roadmap (single source of truth)
    Phases: A Foundations → B The Craft → C Power User → D Builder → E Operator
    Levels: L1 Foundation · L2 Practitioner · L3 Expert
-   Verified against official docs September 2026. Course content stamps
-   fast-moving facts with "as of September 2026".
+   Verified against official docs October 2026. Course content stamps
+   fast-moving facts with "as of October 2026".
    ============================================================= */
 /* Helper available to all content files (loaded first): renders an
    escaped prompt/code block with header label + copy button. */
@@ -18,7 +18,7 @@ window.LESSONS = window.LESSONS || {};
 window.COURSE = {
   name: "Claude Mastery",
   tagline: "Zero to Operator — the complete course on Claude",
-  version: "1.1 · September 2026",
+  version: "1.2 · October 2026",
   phases: [
     { id: "A", name: "Foundations", blurb: "How Claude actually works — the mental model everything else stands on." },
     { id: "B", name: "The Craft", blurb: "Prompting: the highest-leverage skill of the decade." },

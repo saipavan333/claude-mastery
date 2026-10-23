@@ -215,7 +215,7 @@ function renderHome(){
   if(heroStop){heroStop();heroStop=null}
   var v=$("#view");
   var h='<section id="hero"><canvas id="loom" aria-hidden="true"></canvas><div class="hero-in">'+
-    '<span class="kicker">Verified against official docs · September 2026</span>'+
+    '<span class="kicker">Verified against official docs · October 2026</span>'+
     '<h1>Master <span class="gx">Claude</span>.<br>Then get paid for it.</h1>'+
     '<p class="sub">The complete operator’s course: how Claude works, prompting craft, the app, Cowork, Claude Code, MCP, the API, agents — and three full tracks on turning the skill into income. Plain English. Interactive labs. Real 2026 numbers.</p>'+
     '<div class="hero-cta">'+(hasProgress()?
@@ -1020,7 +1020,7 @@ function renderCert(){
     shareThing("Claude Mastery",msg+" — learning to build and sell AI agents.",courseURL(),$("#certMsg"));});
 }
 function renderTrust(){
-  var v=$("#view"),F=window.FACTS,rev=(F&&F.reviewed)||"2026-09-22";
+  var v=$("#view"),F=window.FACTS,rev=(F&&F.reviewed)||"2026-10-23";
   var h='<div class="wrap"><div class="page-h"><h1>🛡️ Trust &amp; Method</h1><p>How this course is built, how it stays current, and how your data is handled. No spin — audit any of it.</p></div>';
   h+='<div class="sec"><h3>Who made this</h3><p>Claude Mastery — Zero to Operator is an independent, self-paced course built by U E Sai Pavan Vamshi Krishna to teach Claude end-to-end: how it works, prompting, the app and Cowork, Claude Code, MCP, the API, agents, and how to turn the skill into income. It is not an official Anthropic product, and completion here is a personal learning record, not an accredited credential.</p></div>';
   h+='<div class="sec"><h3>How it stays current</h3><p>Fast-moving facts — model names, prices, plan limits — don’t live scattered in the lessons; they live in one file with a <b>verified date</b> and a link to the official source. Anything past its review window is flagged automatically, and a scheduled check re-audits the source pages. You can inspect every figure on the <a href="#current">Current facts</a> page. Last full review: <b>'+esc(rev)+'</b>. When you spot something out of date, the honest move is to check the official source — and every fact tells you where that is.</p></div>';
@@ -1097,7 +1097,7 @@ function renderStart(){
   '<li><b>Minute 16–19:</b> Do lesson 1.1’s “Do it for real” exercise in an actual Claude tab.</li>'+
   '<li><b>Minute 19–20:</b> Open <a href="#cards">Flashcards</a>, answer whatever is due (today: 1 card). Stop. You’re done for day one.</li></ul>'+
   '<div class="callout gold"><b>The daily loop:</b> one lesson → its lab → its real-tool exercise → quiz → mark complete → flashcards due that day. 30–45 minutes. Miss a day? Just continue — the streak counter forgives what matters: coming back.</div>'+
-  '<div class="callout note"><b>Five rules.</b> 1) Do the real-tool exercises — reading about Claude without using Claude is how you stay average. 2) Wrong quiz answers are the course working, not failing. 3) One lesson per sitting beats four lessons on Sunday. 4) The money tracks (11–13) will tempt you to skip ahead — the people who make money are the ones who didn’t. 5) When a fact might have changed after September 2026, the lesson tells you exactly where to check.</div>'+
+  '<div class="callout note"><b>Five rules.</b> 1) Do the real-tool exercises — reading about Claude without using Claude is how you stay average. 2) Wrong quiz answers are the course working, not failing. 3) One lesson per sitting beats four lessons on Sunday. 4) The money tracks (11–13) will tempt you to skip ahead — the people who make money are the ones who didn’t. 5) When a fact might have changed after October 2026, the lesson tells you exactly where to check.</div>'+
   '</div></div>';
   v.innerHTML=h;
 }

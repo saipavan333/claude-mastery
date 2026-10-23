@@ -9,6 +9,28 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## 2026-10-23
+
+### Verified (checked 2026-10-23 against Anthropic's own pages)
+- **The frontier moved to the 5.5 generation.** **Opus 5.5** (`claude-opus-5-5`) is now the
+  default "start here" model at **$4 / $20 per MTok** (down from Opus 5's $5/$25); **Sonnet 5.5**
+  (`claude-sonnet-5-5`, $2/$10) is the speed/intelligence workhorse; **Haiku 5.5** (`claude-haiku-5-5`)
+  is the cheapest, fastest small model — now **1M context** (up from 200k) and roughly **75% cheaper**
+  than Haiku 4.5 (from $0.10 / $0.50). **Fable 5.1** (`claude-fable-5-1`, $10/$50) remains the premium
+  top tier; **Mythos 5.1** is now a Claude Security / trusted-access model and left the general lineup.
+- **Every current model now carries the full 1,000,000-token window** — the old 200k standard is
+  retired. Corrected the context-window lesson (1.2) and the model-family lesson (1.3); the
+  premium-vs-cheapest price spread widened to ~100× (quiz updated to match).
+- **Docs, Slides & Design left beta** — generally available on every plan, including Free. Noted the
+  new **Dashboards** + **Motion** (beta) surfaces, monthly API credits on Max/Team, and the Sonnet 5.5
+  cache-read price cut to $0.10. Code examples updated to the 5.5 model IDs.
+- Re-stamped currency notes to October 2026; course version → 1.2; service-worker cache → v19.
+
+### Not changed this round (flagged for a future pass)
+- No new tracks or lessons. Two notable standalone launches from the month — **Claude Duet** (a
+  proactive-agent app, research preview) and **Claude Code mods** — are candidates for a future lesson,
+  not yet taught here. This was a currency/standards refresh, not an expansion.
+
 ## 2026-09-22
 
 ### Verified (checked 2026-09-22 against Anthropic's own pages)
