@@ -71,3 +71,7 @@ Fast-moving facts (prices, plans, salary ranges, certifications, the product sur
 The look is a custom theme called **Ember Loom** — deep espresso background, warm ember / amber / gold accents with teal and violet counterpoints, and a self-healing woven-thread hero animation. Dark, colorful, and readable, with no white or pale chrome.
 
 Built to be the best course on Claude in the world. Learn it end to end, do the labs, ship the capstones, and go earn.
+
+## Licence
+
+© 2026 Sai Pavan UE. Free to read and share with credit, not for commercial use: [CC BY-NC 4.0](LICENSE).
