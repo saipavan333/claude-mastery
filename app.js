@@ -643,7 +643,13 @@ function renderLabs(){
     h+='<a class="lab-card rv" href="#lesson/'+l.id+'"><b>'+esc(W.t)+'</b><p>'+esc(W.short||W.guide.replace(/<[^>]+>/g,"").slice(0,110))+'…</p>'+
        '<span class="in">In lesson '+l.id+' · '+esc(l.title)+'</span></a>';
   });
-  h+='</div></div>';
+  h+='</div>';
+  // pass 2: the smaller "Try it" interactives that live in each lesson's opening
+  var EZ=window.EASE||{},tries=FLAT.filter(function(l){return EZ[l.id]&&EZ[l.id].play});
+  if(tries.length){h+='<div class="page-h" style="margin-top:34px"><h2>Quick try-its</h2><p>'+tries.length+' small interactives at the top of their lessons: move a slider or press a button and watch the mechanism change.</p></div><div class="lab-grid">';
+    tries.forEach(function(l){h+='<a class="lab-card rv" href="#lesson/'+l.id+'"><b>'+esc(EZ[l.id].play.t)+'</b><p>'+esc((EZ[l.id].line||"").slice(0,110))+'</p><span class="in">In lesson '+l.id+' · '+esc(l.title)+'</span></a>'});
+    h+='</div>'}
+  h+='</div>';
   v.innerHTML=h;reveal(v);
 }
 
