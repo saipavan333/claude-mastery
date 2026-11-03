@@ -9,7 +9,7 @@ It is a single-page web app with **no build step and no dependencies**. Open it 
 - **100 lessons** across **16 tracks** and **5 phases** (Foundations → The Craft → Power User → Builder → Operator).
 - **6 interactive labs** — a temperature sampler, a tokenizer, a model chooser, a unit-economics/caching calculator, an agent-loop stepper, and a pricing comparator. You move the levers yourself.
 - **15 inline diagrams** — next-token prediction, the context window, the model family, the agent loop, MCP wiring, the lethal trifecta, tool-use, caching economics, and more.
-- **215-term glossary** that also powers the dotted-underline **tooltips** inside every lesson (first occurrence of each term is linked automatically).
+- **218-term glossary** that also powers the dotted-underline **tooltips** inside every lesson (first occurrence of each term is linked automatically).
 - **14 cheat sheets** — one dense, printable card per track, two-way linked to the tracks.
 - **29 interview questions** (easy / medium / hard) with full model answers — the kind asked in AI-native job interviews and by paying clients.
 - **Flashcards** with a Leitner spaced-repetition schedule (1 / 3 / 7 / 21 / 60 days).
@@ -64,7 +64,7 @@ npm run verify                                     # all tracks
 
 ## A note on facts
 
-Fast-moving facts (prices, plans, salary ranges, certifications, the product surface) are stamped **"as of July 2026"** in the lessons and were verified against official documentation at build time. Markets and products move — verify current specifics at the source before you rely on a number. The interactive calculators use clearly-labeled *illustrative* rates for intuition, not official pricing.
+Fast-moving facts (prices, plans, salary ranges, certifications, the product surface) live in `content/facts.js`, each with the date it was last checked against official documentation (last full review: 3 November 2026). Every lesson also carries a one-line "school-kid picture" analogy (`content/analogies.js`). Markets and products move — verify current specifics at the source before you rely on a number. The interactive calculators use clearly-labeled *illustrative* rates for intuition, not official pricing.
 
 ## Design
 

@@ -9,6 +9,37 @@ The format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## 2026-11-03
+
+### Fixed (wrong facts, checked 2026-11-03 against Anthropic's own pages)
+- **Tokens per word (1.2, glossary, cheat sheet, 1.2 lab).** The course taught "1 token = 3/4 word" and claimed the 2026
+  tokenizer packs ~30% *more* text per token. The models overview says the opposite: on the tokenizer introduced with
+  Opus 4.7, 1M tokens is about 555k words (it was about 750k). Rule of thumb is now tokens = words x 1.8.
+- **Plans (1.5, facts).** "Max 20x" is now **Ultra** ($200/mo: no 5-hour limit for verified accounts, 10x Pro weekly,
+  $200/mo API credits). Max ($100) includes $100/mo API credits; Team pools up to $500/mo; Enterprise has a 20-seat
+  minimum plus usage at API rates. "Subscriptions don't include API credits" removed.
+- **Temperature and prefill (9.2, 3.3, 2.5, glossary, cheat sheets).** On API version `2026-10-21` (default in Python
+  SDK 2.0+ / TypeScript SDK 1.0+) `temperature`, `top_p`, `top_k` are a 400 on every model; Claude 4.7+ accept only the
+  default. A prefilled assistant turn is a 400 on every current model. 9.2 rebuilt around effort, adaptive thinking,
+  stop sequences and streaming; consistency taught as examples + structure + evals.
+- **`content[0].text` (9.1, 16.5).** Current models can return a thinking block first; samples now join text blocks.
+- **Structured outputs (9.5).** `additionalProperties: false` is required; check `stop_reason` for refusal/max_tokens.
+- **Caching (9.6, glossary, 2.3).** Cache reads are 0.05x on Opus 5.5 and Sonnet 5.5, 0.025x on Fable 5.1, 0.1x on
+  others; 5-minute writes 1.25x, 1-hour 2x. Added worked break-even and daily-cost arithmetic.
+- **MCP server (8.4).** `mcp` 2.x removed `mcp.server.fastmcp`; the lesson server now uses `MCPServer` and was run end
+  to end under mcp 2.3.0. `claude mcp add --transport stdio ...` syntax updated.
+- **Chrome (6.1)** is GA on paid plans, not beta. **Mythos 5.1** wording reduced to what the docs state.
+
+### Added
+- A **school-kid analogy** on all 100 lessons (`content/analogies.js`, rendered as "School-kid picture").
+- **7.5 Under the hood:** real SKILL.md, subagent, hooks `settings.json` and a tested PreToolUse guard (exit 2 blocks),
+  plugin layout and install commands. **10.5 Grading an agent:** outcome vs path, pass@k vs pass^k with numbers.
+- Agent Skills standard donated to the Agentic AI Foundation (22 Oct 2026) noted in 4.8, 7.5, 16.4 and facts.
+- 9.6 calculator: model presets with real cache multipliers, hit rate, write premium.
+- `tools/build_assistant_data.js`; Ask-AI index regenerated (88 -> 100 lessons).
+- Wide tables scroll sideways on phones instead of being clipped.
+- Version 1.3; service-worker cache v20. OG images intentionally not regenerated (font fallback on this machine).
+
 ## 2026-10-23
 
 ### Verified (checked 2026-10-23 against Anthropic's own pages)
