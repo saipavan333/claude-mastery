@@ -13,7 +13,7 @@ W["1.1"] = {
  t:"Temperature: watch the dice reshape",
  short:"Slide temperature and see how Claude's next-token odds sharpen or flatten — then sample.",
  guide:"Claude picks the next token from a set of <b>probabilities</b>. <b>Temperature</b> reshapes those odds: low makes the top choice near-certain (focused, repeatable), high flattens them (varied, creative). Slide it, then hit Sample a few times.",
- note:"Low temperature for facts and format-critical work; higher for brainstorming and variety. Same idea everywhere Claude generates.",
+ note:"This is how sampling works inside every language model. One 2026 twist: you can no longer set temperature on current Claude API models (only the default is accepted, and API version 2026-10-21 rejects the field outright). Consistency now comes from your prompt, examples and structured outputs — Lesson 9.2.",
  build:function(root){
    var base=[["mat",0.60,"#4fd6b5"],["rug",0.22,"#6aa8ff"],["floor",0.10,"#b79cff"],["couch",0.05,"#ffd24d"],["banana",0.03,"#ff7a9c"]];
    var wrap=el("div"); root.appendChild(wrap);
@@ -56,8 +56,8 @@ W["1.1"] = {
 W["1.2"] = {
  t:"Tokenizer: see your words become tokens",
  short:"Type text and watch it break into approximate tokens — the unit Claude actually counts.",
- guide:"Claude reads in <b>tokens</b> (~3/4 of a word). Type below to see an approximate tokenization and count. Notice common words are one token while rare or long words split into several.",
- note:"This is an approximation for intuition; real tokenization varies. The point: think in tokens, because limits and pricing are counted in them.",
+ guide:"Claude reads in <b>tokens</b> — on current models about 0.55 of an English word each (roughly 1.8 tokens per word). Type below to see an approximate tokenization and count. Notice common words are one token while rare or long words split into several.",
+ note:"This splitter is a rough approximation for intuition and will undercount for current models; real tokenization varies. For exact numbers use the API's token-counting endpoint (messages.count_tokens). The point: think in tokens, because limits and pricing are counted in them.",
  build:function(root){
    var wrap=el("div"); root.appendChild(wrap);
    var ta=el("textarea",{rows:"3",style:"width:100%;resize:vertical"},"The cat sat on the antidisestablishmentarianism mat."); wrap.appendChild(ta);
@@ -133,27 +133,36 @@ W["1.3"] = {
 W["9.6"] = {
  t:"Unit-economics & caching calculator",
  short:"Plug in calls and tokens; see monthly cost and how prompt caching slashes it.",
- guide:"Products live or die on <b>unit economics</b>. Enter your usage and an illustrative price, then see monthly cost &#8212; and how <b>prompt caching</b> a large shared prefix changes the math.",
- note:"Rates here are illustrative sliders for intuition, not official prices &#8212; always verify current pricing before you rely on numbers.",
+ guide:"Products live or die on <b>unit economics</b>. Pick a model (rates from Anthropic's pricing page, checked 3 Nov 2026) or enter your own, set your usage, and see monthly cost &#8212; and how <b>prompt caching</b> a large shared prefix changes the math.",
+ note:"Cached reads use each model's real multiplier (0.05&#215; on Opus 5.5 and Sonnet 5.5, 0.1&#215; on Haiku 5.5, 0.025&#215; on Fable 5.1). Calls that miss the cache pay the 5-minute write price (1.25&#215;). Months are 30 days. Prices change &#8212; re-check claude.com/pricing before you quote a client.",
  build:function(root){
    var wrap=el("div"); root.appendChild(wrap);
    function num(label,val,id,step){ var row=el("div",{class:"wrow"}); row.appendChild(el("label",null,label)); var inp=el("input",{type:"number",value:val,id:id,min:"0",step:step||"1",style:"width:120px"}); row.appendChild(inp); wrap.appendChild(row); return inp; }
+   var PRESETS={opus55:["Opus 5.5",4,20,0.05],sonnet55:["Sonnet 5.5",2,10,0.05],haiku55:["Haiku 5.5 (prompt \u2264100k)",0.10,0.50,0.1],fable51:["Fable 5.1",10,50,0.025],custom:["Custom",3,15,0.1]};
+   var rowM=el("div",{class:"wrow"}); rowM.appendChild(el("label",null,"Model"));
+   var sel=el("select",{id:"c_model"}); Object.keys(PRESETS).forEach(function(k){ var o=el("option",{value:k},PRESETS[k][0]); if(k==="sonnet55")o.setAttribute("selected","selected"); sel.appendChild(o); }); rowM.appendChild(sel); wrap.appendChild(rowM);
    var calls=num("Calls per day","2000","c_calls");
    var inTok=num("Input tokens / call","1500","c_in");
    var cacheTok=num("...of which cacheable (shared prefix)","1100","c_cache");
    var outTok=num("Output tokens / call","400","c_out");
-   var rowP=el("div",{class:"wrow"}); rowP.appendChild(el("label",null,"Illustrative rate ($ / million tokens)"));
-   var inRate=el("input",{type:"number",value:"3",id:"c_ir",step:"0.5",style:"width:90px"}); var outRate=el("input",{type:"number",value:"15",id:"c_or",step:"0.5",style:"width:90px"});
+   var hit=num("Cache hit rate (% of calls)","95","c_hit");
+   var rowP=el("div",{class:"wrow"}); rowP.appendChild(el("label",null,"Rate ($ / million tokens)"));
+   var inRate=el("input",{type:"number",value:"2",id:"c_ir",step:"0.5",style:"width:90px"}); var outRate=el("input",{type:"number",value:"10",id:"c_or",step:"0.5",style:"width:90px"});
+   var readMult=el("input",{type:"number",value:"0.05",id:"c_rm",step:"0.005",style:"width:80px"});
    rowP.appendChild(el("span",{style:"color:var(--mut);font-size:12px"},"in")); rowP.appendChild(inRate);
-   rowP.appendChild(el("span",{style:"color:var(--mut);font-size:12px"},"out")); rowP.appendChild(outRate); wrap.appendChild(rowP);
+   rowP.appendChild(el("span",{style:"color:var(--mut);font-size:12px"},"out")); rowP.appendChild(outRate);
+   rowP.appendChild(el("span",{style:"color:var(--mut);font-size:12px"},"cache read &#215;")); rowP.appendChild(readMult); wrap.appendChild(rowP);
+   sel.addEventListener("change",function(){ var p=PRESETS[sel.value]; inRate.value=p[1]; outRate.value=p[2]; readMult.value=p[3]; calc(); });
+   [inRate,outRate,readMult].forEach(function(i){ i.addEventListener("input",function(){ sel.value="custom"; }); });
    var out=el("div",{style:"margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px"}); wrap.appendChild(out);
    function card(title,val,c){ return "<div style='padding:12px 14px;border-radius:12px;border:1px solid "+c+";background:"+c+"14'><div style='color:var(--mut);font-size:12px'>"+title+"</div><div style='color:"+c+";font-size:20px;font-weight:700;margin-top:3px'>"+val+"</div></div>"; }
-   function money(x){ return "$"+(x>=1000?(x/1000).toFixed(1)+"k":x.toFixed(2)); }
+   function money(x){ return "$"+(x>=1000?(x/1000).toFixed(1)+"k":x>=1?x.toFixed(2):x.toFixed(4)); }
    function calc(){
      var C=+calls.value||0, I=+inTok.value||0, K=clamp(+cacheTok.value||0,0,I), O=+outTok.value||0, IR=+inRate.value||0, OR=+outRate.value||0;
+     var H=clamp(+hit.value||0,0,100)/100, RM=clamp(+readMult.value||0,0,1);
      var perCallNoCache=(I*IR + O*OR)/1e6;
-     // cached input billed at ~10% (illustrative)
-     var perCallCache=((I-K)*IR + K*IR*0.1 + O*OR)/1e6;
+     // cached prefix: hits pay the read multiplier, misses pay the 5-minute write (1.25x)
+     var perCallCache=((I-K)*IR + K*IR*(H*RM + (1-H)*1.25) + O*OR)/1e6;
      var mNo=perCallNoCache*C*30, mYes=perCallCache*C*30;
      var save=mNo>0?(1-mYes/mNo)*100:0;
      out.innerHTML=card("Per call (no cache)",money(perCallNoCache)+"",  "#ff7a9c")+
@@ -164,7 +173,7 @@ W["9.6"] = {
      var sv=el("div",{id:"saveline",style:"margin-top:12px;font-size:14px;color:var(--teal)"},"Caching the shared prefix cuts about <b>"+save.toFixed(0)+"%</b> of monthly spend here. That percentage is often the difference between a viable product and a money-loser.");
      wrap.appendChild(sv);
    }
-   [calls,inTok,cacheTok,outTok,inRate,outRate].forEach(function(i){ i.addEventListener("input",calc); });
+   [calls,inTok,cacheTok,outTok,hit,inRate,outRate,readMult].forEach(function(i){ i.addEventListener("input",calc); });
    calc();
  }
 };
