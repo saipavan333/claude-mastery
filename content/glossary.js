@@ -5,7 +5,7 @@ window.GLOSSARY = [
 /* ---------- Foundations ---------- */
 {t:"LLM",d:"Large Language Model — an AI trained on vast text to predict the next token; Claude is one. It generates language by repeatedly predicting what comes next.",k:"foundations"},
 {t:"large language model",d:"An AI system trained on huge amounts of text that produces language by predicting the next token, one at a time.",k:"foundations"},
-{t:"token",d:"The chunk of text Claude reads and writes in — roughly 3/4 of a word. Prices and limits are all counted in tokens, not words.",k:"foundations"},
+{t:"token",d:"The chunk of text Claude reads and writes in — on current models a bit over half an English word (about 1.8 tokens per word; older models were nearer 3/4 of a word per token). Prices and limits are all counted in tokens, not words.",k:"foundations"},
 {t:"tokenization",d:"The process of splitting text into tokens before the model processes it. Common words are one token; rare words split into several.",k:"foundations"},
 {t:"context window",d:"The maximum number of tokens Claude can consider at once — its working memory for a single conversation or request.",k:"foundations"},
 {t:"context",d:"Everything Claude can currently see: your messages, its replies, system prompt, files, and tool results — all held in the context window.",k:"foundations"},

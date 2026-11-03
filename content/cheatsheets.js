@@ -4,7 +4,7 @@
 window.CHEATSHEETS = [
 {tid:"t1", title:"Track 1 — How Claude Works", items:[
   ["LLM = next-token predictor","Claude generates by predicting one token at a time — powerful pattern completion, not a database lookup."],
-  ["token ~= 3/4 word","Everything (limits, price) is counted in tokens, not words. ~750 words per 1,000 tokens."],
+  ["token ~= 0.55 word (current models)","Everything (limits, price) is counted in tokens, not words. ~555 words per 1,000 tokens on today's tokenizer (older models: ~750)."],
   ["context window","Claude's working memory — all it can see at once. Long but finite; large context can dilute focus."],
   ["Haiku / Sonnet / Opus","Fast+cheap / balanced / most capable. Match the model to the task's difficulty and volume."],
   ["knowledge cutoff","No built-in facts after its training date — use search or provide sources for anything newer."],
