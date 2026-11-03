@@ -102,7 +102,7 @@ window.VZ = (function(){
     var s=scene(W,H,o.aria||"fan"),cw=o.cw||128;
     var A=s.box(12,(o.sh?H/2-o.sh/2:H/2-32),cw,o.sh||64,src.t,src.s,src.tone||"a");
     var mid=o.merge?(W-cw)/2:W-12-(o.kw||150),kw=o.kw||150,K=[];
-    kids.forEach(function(k,i){var y=14+i*(bh+gy);K.push(s.box(mid,y,kw,bh,k.t,k.s,k.tone||"t",{step:o.stepped?i:null}));s.link(A,K[i],k.via||null,{step:o.stepped?i:null});});
+    kids.forEach(function(k,i){var y=(H-(n*bh+(n-1)*gy))/2+i*(bh+gy);K.push(s.box(mid,y,kw,bh,k.t,k.s,k.tone||"t",{step:o.stepped?i:null}));s.link(A,K[i],k.via||null,{step:o.stepped?i:null});});
     var M=null;if(o.merge){M=s.box(W-12-cw,H/2-32,cw,64,o.merge.t,o.merge.s,o.merge.tone||"g",{step:o.stepped?n:null});K.forEach(function(k){s.link(k,M,null,{step:o.stepped?n:null})});}
     s.src=A;s.kids=K;s.merge=M;return s;
   }
