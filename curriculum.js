@@ -18,7 +18,7 @@ window.LESSONS = window.LESSONS || {};
 window.COURSE = {
   name: "Claude Mastery",
   tagline: "Zero to Operator — the complete course on Claude",
-  version: "1.2 · October 2026",
+  version: "1.3 · November 2026",
   phases: [
     { id: "A", name: "Foundations", blurb: "How Claude actually works — the mental model everything else stands on." },
     { id: "B", name: "The Craft", blurb: "Prompting: the highest-leverage skill of the decade." },

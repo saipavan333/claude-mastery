@@ -397,6 +397,7 @@ function renderLesson(id){
      '<span class="pill"><span class="lvl '+t.level+'">'+t.level+'</span></span>'+
      (L.asOf?verifiedBadge():'')+'</div></div>';
   if(L.breath)h+='<div class="breath rv"><b>In one breath:</b> '+L.breath+'</div>';
+  if(L.kid)h+='<div class="kid rv"><b>School-kid picture:</b> '+L.kid+'</div>';
   if(L.hook)h+='<div class="sec rv">'+L.hook+'</div>';
   if(L.video)h+=videoBlock(L.video);
   var D=DIAGRAMS[id];
@@ -558,7 +559,7 @@ function readAloud(root){
   var speaking=false,queue=[],qi=0,keep=null;
   function collect(){
     var art=$("article.lesson");var els=[];
-    $$(".breath, .sec p, .sec li, .wkb .nar, .recap, .mist li",art).forEach(function(el){
+    $$(".breath, .kid, .sec p, .sec li, .wkb .nar, .recap, .mist li",art).forEach(function(el){
       if(el.closest(".widget,.quiz,.pblock,pre"))return;
       var t=el.textContent.replace(/\s+/g," ").trim();
       if(t.length>8)els.push({el:el,t:t});
@@ -1106,7 +1107,7 @@ function renderStart(){
 /* full text of a lesson (stripped) for the search index */
 function lessonText(L){
   if(!L)return "";
-  var p=[L.sub,L.breath,L.hook];
+  var p=[L.sub,L.breath,L.kid,L.hook];
   (L.secs||[]).forEach(function(s){p.push(s.h,s.b)});
   if(L.worked)p.push(L.worked.t,L.worked.html);
   if(L.lab)p.push(L.lab.html,L.lab.expect);

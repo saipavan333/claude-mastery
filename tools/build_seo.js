@@ -25,6 +25,7 @@ ctx.PB = ctx.window.PB;                      // some track files call PB()
 const trackFiles = fs.readdirSync(path.join(ROOT, 'content')).filter(f => /^track\d+\.js$/.test(f)).sort();
 for (const f of trackFiles) vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', f), 'utf8'), ctx);
 try { vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'showcase.js'), 'utf8'), ctx); } catch (e) {}
+try { vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'analogies.js'), 'utf8'), ctx); } catch (e) {}
 
 const COURSE = ctx.window.COURSE, TRACKS = ctx.window.TRACKS, LESSONS = ctx.window.LESSONS;
 if (!TRACKS || !LESSONS) { console.error('Failed to load TRACKS/LESSONS'); process.exit(1); }
@@ -63,6 +64,7 @@ FLAT.forEach(m => {
   let body = '<h1>' + html(m.id + ' · ' + m.title) + '</h1>';
   body += '<p class="lead">' + html(strip(L.sub)) + '</p>';
   if (L.breath) body += '<p><strong>In one breath:</strong> ' + html(strip(L.breath)) + '</p>';
+  if (L.kid) body += '<p><strong>School-kid picture:</strong> ' + html(strip(L.kid)) + '</p>';
   (L.secs || []).forEach(s => { body += '<h2>' + html(strip(s.h)) + '</h2><p>' + html(strip(s.b)) + '</p>'; });
   if (L.recap) body += '<h2>Recap</h2><p>' + html(strip(L.recap)) + '</p>';
 

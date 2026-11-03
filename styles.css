@@ -154,6 +154,10 @@ img,svg,canvas{max-width:100%}
   background:linear-gradient(120deg,rgba(255,138,84,.10),rgba(255,210,77,.05));border:1px solid var(--line2)}
 .breath::before{content:"☄";position:absolute;left:18px;top:14px;font-size:22px}
 .breath b{color:var(--ember2);font-family:var(--disp);letter-spacing:.02em}
+.kid{position:relative;border-radius:var(--r2);padding:16px 20px 16px 56px;margin:-8px 0 20px;
+  background:linear-gradient(120deg,rgba(79,214,181,.10),rgba(106,168,255,.05));border:1px solid var(--line2)}
+.kid::before{content:"🎒";position:absolute;left:18px;top:13px;font-size:20px}
+.kid b{color:var(--teal);font-family:var(--disp);letter-spacing:.02em}
 .sec{margin:34px 0}
 .sec>h2{font-size:22px;margin:0 0 12px;padding-left:14px;border-left:4px solid var(--ember);border-radius:2px}
 .sec>h3{font-size:17px;margin:20px 0 8px;color:var(--ember2)}
@@ -166,6 +170,8 @@ table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
 th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
 th{background:var(--bg2);font-family:var(--disp);font-size:13px;letter-spacing:.03em;color:var(--ember2)}
 tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+/* narrow screens: wide tables scroll sideways inside the lesson instead of being clipped */
+@media (max-width:720px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}th,td{padding:8px 10px}}
 .callout{border-radius:var(--r);padding:15px 18px;margin:16px 0;border:1px solid;font-size:14.5px}
 .callout b:first-child{font-family:var(--disp)}
 .callout.tip{border-color:rgba(79,214,181,.35);background:rgba(79,214,181,.07)}
