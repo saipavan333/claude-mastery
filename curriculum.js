@@ -57,7 +57,7 @@ window.TRACKS = [
     blurb: "Chaining, long-context strategy, structured extraction, hallucination defenses, reusable templates, and evaluating prompts like an engineer.",
     lessons: [
       { id: "3.1", title: "Prompt Chaining: Divide and Conquer", min: 15 },
-      { id: "3.2", title: "Long-Context Mastery: 200K Tokens Without Tears", min: 15 },
+      { id: "3.2", title: "Long-Context Mastery: A Million Tokens Without Tears", min: 15 },
       { id: "3.3", title: "Prefilling & Structured Extraction", min: 14 },
       { id: "3.4", title: "Hallucination Defenses: Engineering for Truth", min: 15 },
       { id: "3.5", title: "Prompt Templates: Build Once, Run Forever", min: 13 },
