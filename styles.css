@@ -620,7 +620,7 @@ kbd{border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padd
 .vz .vzl rect{fill:var(--bg1);stroke:var(--line);stroke-width:1}
 .vz .vzbar .tr{fill:var(--bg3)}
 .vz .vzbar.k-t .fl{fill:var(--teal)}.vz .vzbar.k-a .fl{fill:var(--ember)}.vz .vzbar.k-b .fl{fill:var(--blue)}
-.vz .vzbar.k-g .fl{fill:var(--gold)}.vz .vzbar.k-v .fl{fill:var(--violet)}.vz .vzbar.k-r .fl{fill:var(--rose)}.vz .vzbar.k-e .fl{fill:var(--green)}
+.vz .vzbar.k-n .fl{fill:var(--dim)}.vz .vzbar.k-g .fl{fill:var(--gold)}.vz .vzbar.k-v .fl{fill:var(--violet)}.vz .vzbar.k-r .fl{fill:var(--rose)}.vz .vzbar.k-e .fl{fill:var(--green)}
 .vz.stepping [data-step]{opacity:.32;transition:opacity .25s}
 .vz.stepping [data-step].done{opacity:.62}
 .vz.stepping [data-step].on{opacity:1}
