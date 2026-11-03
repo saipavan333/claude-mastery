@@ -156,7 +156,7 @@ W["9.6"] = {
    [inRate,outRate,readMult].forEach(function(i){ i.addEventListener("input",function(){ sel.value="custom"; }); });
    var out=el("div",{style:"margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px"}); wrap.appendChild(out);
    function card(title,val,c){ return "<div style='padding:12px 14px;border-radius:12px;border:1px solid "+c+";background:"+c+"14'><div style='color:var(--mut);font-size:12px'>"+title+"</div><div style='color:"+c+";font-size:20px;font-weight:700;margin-top:3px'>"+val+"</div></div>"; }
-   function money(x){ return "$"+(x>=1000?(x/1000).toFixed(1)+"k":x>=1?x.toFixed(2):x.toFixed(4)); }
+   function money(x){ return "$"+(x>=1000?(x/1000).toFixed(1)+"k":x>=1?x.toFixed(2):x>=0.001?x.toFixed(4):x.toFixed(6)); }
    function calc(){
      var C=+calls.value||0, I=+inTok.value||0, K=clamp(+cacheTok.value||0,0,I), O=+outTok.value||0, IR=+inRate.value||0, OR=+outRate.value||0;
      var H=clamp(+hit.value||0,0,100)/100, RM=clamp(+readMult.value||0,0,1);
