@@ -98,7 +98,7 @@ E["11.4"]={
 /* ---------- 11.6 ---------- */
 (function(){
   var s=VZ.scene(400,240,"Scaling a practice: hours, retainers, a niche, then leverage");
-  var st=[["Hours","capped by\nyour time","n"],["Retainers","steady\nmonthly base","b"],["A niche","proof\ncompounds","v"],["Leverage","systems,\npeople","e"]];
+  var st=[["Hours","capped by\nyour time","n"],["Retainers","regular\nincome","b"],["A niche","proof\ncompounds","v"],["Leverage","systems,\npeople","e"]];
   var B=st.map(function(p,i){return s.box(14+i*100,164-i*46,86,68,p[0],p[1],p[2])});
   for(var i=1;i<B.length;i++)s.link(B[i-1],B[i]);
   s.text(14,22,"↗ income less tied to your hours","sm h","start");
