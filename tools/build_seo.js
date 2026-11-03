@@ -26,6 +26,10 @@ const trackFiles = fs.readdirSync(path.join(ROOT, 'content')).filter(f => /^trac
 for (const f of trackFiles) vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', f), 'utf8'), ctx);
 try { vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'showcase.js'), 'utf8'), ctx); } catch (e) {}
 try { vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'analogies.js'), 'utf8'), ctx); } catch (e) {}
+// pass 2: plain openings, everyday-picture maps and one-line recaps (content/ease/tNN.js)
+try { vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'viz-kit.js'), 'utf8'), ctx);
+  for (const f of fs.readdirSync(path.join(ROOT, 'content', 'ease')).filter(f => /^t\d+\.js$/.test(f)).sort())
+    vm.runInContext(fs.readFileSync(path.join(ROOT, 'content', 'ease', f), 'utf8'), ctx); } catch (e) { console.error('ease load failed:', e.message); }
 
 const COURSE = ctx.window.COURSE, TRACKS = ctx.window.TRACKS, LESSONS = ctx.window.LESSONS;
 if (!TRACKS || !LESSONS) { console.error('Failed to load TRACKS/LESSONS'); process.exit(1); }
@@ -63,10 +67,14 @@ FLAT.forEach(m => {
   // crawler-readable body: sub, one-breath, section headings+text, recap
   let body = '<h1>' + html(m.id + ' · ' + m.title) + '</h1>';
   body += '<p class="lead">' + html(strip(L.sub)) + '</p>';
+  const EZ = (ctx.window.EASE || {})[m.id];
+  if (EZ && EZ.plain) body += '<h2>Start here</h2><p>' + html(strip(EZ.plain)) + '</p>';
   if (L.breath) body += '<p><strong>In one breath:</strong> ' + html(strip(L.breath)) + '</p>';
-  if (L.kid) body += '<p><strong>School-kid picture:</strong> ' + html(strip(L.kid)) + '</p>';
+  if (EZ && (EZ.an || L.kid)) body += '<p><strong>Everyday picture:</strong> ' + html(strip(EZ.an || L.kid)) + (EZ.breaks ? ' <em>Where it breaks:</em> ' + html(strip(EZ.breaks)) : '') + '</p>';
+  else if (L.kid) body += '<p><strong>School-kid picture:</strong> ' + html(strip(L.kid)) + '</p>';
   (L.secs || []).forEach(s => { body += '<h2>' + html(strip(s.h)) + '</h2><p>' + html(strip(s.b)) + '</p>'; });
   if (L.recap) body += '<h2>Recap</h2><p>' + html(strip(L.recap)) + '</p>';
+  if (EZ && EZ.line) body += '<p><strong>In one line:</strong> ' + html(strip(EZ.line)) + '</p>';
 
   const ld = {
     "@context":"https://schema.org","@type":"LearningResource",
