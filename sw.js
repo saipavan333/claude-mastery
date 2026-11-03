@@ -10,7 +10,7 @@ var SHELL = [
   "content/track01.js","content/track02.js","content/track03.js","content/track04.js",
   "content/track05.js","content/track06.js","content/track07.js","content/track08.js",
   "content/track09.js","content/track10.js","content/track11.js","content/track12.js",
-  "content/track13.js","content/track14.js","content/track15.js","content/track16.js","content/analogies.js","content/viz-kit.js","content/ease/t01.js","content/ease/t02.js","content/ease/t03.js","content/ease/t04.js","content/ease/t05.js","content/ease/t06.js","content/ease/t07.js","content/ease/t08.js","content/ease/t09.js","content/ease/t10.js","content/ease/t11.js","content/ease/t12.js","content/ease/t13.js","content/ease/t14.js",
+  "content/track13.js","content/track14.js","content/track15.js","content/track16.js","content/analogies.js","content/viz-kit.js","content/ease/t01.js","content/ease/t02.js","content/ease/t03.js","content/ease/t04.js","content/ease/t05.js","content/ease/t06.js","content/ease/t07.js","content/ease/t08.js","content/ease/t09.js","content/ease/t10.js","content/ease/t11.js","content/ease/t12.js","content/ease/t13.js","content/ease/t14.js","content/ease/t15.js",
   "content/diagrams.js","content/widgets.js","content/glossary.js",
   "content/cheatsheets.js","content/interview.js","content/facts.js","content/showcase.js",
   "icons/icon-192.png","icons/icon-512.png","icons/maskable-512.png","icons/apple-touch-icon.png",
