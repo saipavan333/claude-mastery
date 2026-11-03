@@ -104,8 +104,8 @@ E["2.5"]={
   plain:"<p>Some questions need working out, like a maths problem with several steps. Claude does better on those if it «thinks» before it answers.</p><p>On today's models this is built in. It's called <b>adaptive thinking</b>: Claude decides how much to think for each question. You steer it with an <b>effort</b> setting, from low to max.</p><p>More effort means better answers on hard problems, but slower and more costly ones. For easy questions, low effort is fine.</p>",
   map:[["Rough paper in a maths test","Thinking tokens Claude writes before its answer"],["Deciding how much working to show","Adaptive thinking"],["The teacher saying «take your time on this one»","The effort setting"]],
   breaks:"You can always skip rough paper for 2 + 3. On Opus 5.5 and Fable 5.1 thinking can't be switched off; you only steer how hard Claude tries.",
-  viz:{svg:think25(1),cap:"Before answering, Claude can write private working (thinking). The effort setting steers how much. Drag the slider below to see the trade."},
-  play:{t:"Turn the effort dial",build:function(root){
+  viz:{cap:"Before answering, Claude can write private working (thinking). The effort setting steers how much. Drag the slider to see the trade."},
+  play:{t:"Turn the effort dial",inFig:1,build:function(root){
     root.innerHTML='<label class="sm">Effort: <b id="l25">medium</b></label><input type="range" id="r25" min="0" max="4" step="1" value="1"><div id="v25"></div><div class="vpout" id="o25"></div>';
     var r=root.querySelector("#r25"),txt=["Quick and cheap. Good for lookups, rewrites and classification.","A balanced middle. It is the default on Opus 5.5 and Haiku 5.5.","More careful work on multi-step problems. It is the default on Sonnet 5.5 and Fable 5.1.","Very thorough. Worth it for hard reasoning where a mistake is expensive.","The most thinking the model will do. Slowest and costliest; save it for the hardest problems."];
     function draw(){var k=+r.value;root.querySelector("#l25").textContent=LV[k];root.querySelector("#v25").innerHTML=think25(k);

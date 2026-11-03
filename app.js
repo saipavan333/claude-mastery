@@ -421,11 +421,12 @@ function renderLesson(id){
         E.map.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'});h+='</table>'}
       if(E.breaks)h+='<p class="abreak"><b>Where the picture breaks:</b> '+E.breaks+'</p>';
       h+='</div>'}
-    var VZD=E.viz||D;
-    if(VZD)h+='<figure class="diagram vzfig rv" id="vzfig"><div class="vzpad">'+VZD.svg+'</div>'+
+    var VZD=E.viz||D,inF=E.play&&E.play.inFig;
+    if(inF)h+='<figure class="diagram vzfig rv" id="vzfig"><div class="vzpad"><div class="vph vzin"><b>'+esc(E.play.t)+'</b><span>TRY IT</span></div><div id="vzplay"></div></div>'+(VZD&&VZD.cap?'<figcaption>'+VZD.cap+'</figcaption>':'')+'</figure>';
+    else if(VZD)h+='<figure class="diagram vzfig rv" id="vzfig"><div class="vzpad">'+VZD.svg+'</div>'+
       (VZD.steps?'<div class="vzctl"><button class="wbtn" id="vzPrev">◀ Back</button><button class="wbtn" id="vzNext">Next step ▶</button><div class="vzcap" id="vzCap"></div></div>':'')+
       (VZD.cap?'<figcaption>'+VZD.cap+'</figcaption>':'')+'</figure>';
-    if(E.play)h+='<div class="vzplay rv"><div class="vph"><b>'+esc(E.play.t)+'</b><span>TRY IT</span></div><div id="vzplay"></div></div>';
+    if(E.play&&!inF)h+='<div class="vzplay rv"><div class="vph"><b>'+esc(E.play.t)+'</b><span>TRY IT</span></div><div id="vzplay"></div></div>';
     h+='</section><div class="deeper-h"><h2>Going deeper</h2><p>The full lesson: the precise version, worked examples, the lab and the quiz.</p></div>';
     if(L.breath)h+='<div class="breath rv"><b>In one breath:</b> '+L.breath+'</div>';
     if(L.hook)h+='<div class="sec rv">'+L.hook+'</div>';

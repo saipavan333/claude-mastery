@@ -630,6 +630,10 @@ kbd{border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padd
 .vzctl .vzcap b{color:var(--ember2)}
 .vzplay{margin:18px 0;border-radius:var(--r2);border:1px solid var(--line2);background:var(--bg1);padding:14px 16px}
 .vzplay .vph{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.vzfig .vzin{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 8px 8px}
+.vzfig .vzin b{font-family:var(--disp);color:var(--ink)}
+.vzfig .vzin span{font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid rgba(79,214,181,.4);border-radius:999px;padding:2px 9px}
+#vzfig #vzplay{padding:0 8px 6px}#vzfig input[type=range]{width:100%;accent-color:var(--ember)}#vzfig .vpout{font-size:14px;color:var(--ink);margin-top:6px}#vzfig .vpout b{color:var(--ember2)}
 .vzplay .vph b{font-family:var(--disp);color:var(--ink)}
 .vzplay .vph span{font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid rgba(79,214,181,.4);border-radius:999px;padding:2px 9px}
 .vzplay input[type=range]{width:100%;accent-color:var(--ember)}
