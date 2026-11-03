@@ -10,7 +10,7 @@ window.CHEATSHEETS = [
   ["knowledge cutoff","No built-in facts after its training date — use search or provide sources for anything newer."],
   ["hallucination is real","Models state false things confidently. Never trust unverified factual output.","risk"],
   ["verify everything factual","Cross-check names, numbers, citations, and quotes before relying on them. The pro habit."],
-  ["temperature 0 to 1","Low = focused/consistent, high = varied/creative. Lower for facts, higher for brainstorming."],
+  ["temperature (retired on the API)","A sampling dial (low = focused, high = varied). Current Claude API models reject it; get consistency from examples, structure, effort and evals."],
   ["surfaces","App, Cowork, Chrome, Excel, Code, API — the same brain in many places. Pick the right one per job."],
   ["plans","Free, Pro, Max, Team, Enterprise — differ by usage, features, and admin controls."]
 ]},
@@ -29,7 +29,7 @@ window.CHEATSHEETS = [
 {tid:"t3", title:"Track 3 — Advanced Prompting", items:[
   ["prompt chaining","Split a big task into steps, each a focused prompt feeding the next. Divide and conquer."],
   ["long context: put the ask last","With big documents, place the question after the material; reference sections explicitly."],
-  ["prefilling","Start Claude's reply to force a format (e.g. open a JSON brace) or steer the beginning."],
+  ["prefilling (retired on the API)","Was: start Claude's reply yourself. Now a 400 on every current model. Use a system-prompt opening instruction or structured outputs."],
   ["structured extraction","Ask for named fields as JSON to pull data cleanly out of messy text."],
   ["hallucination defenses","Allow 'I do not know', ground in sources, ask for quotes+citations, verify."],
   ["templates","Turn a proven prompt into a reusable fill-in-the-slots template. Build once, run forever."],
