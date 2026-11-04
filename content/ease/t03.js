@@ -37,7 +37,7 @@ function lc32(bottom){
   return s.svg();
 }
 E["3.2"]={
-  plain:"<p>Claude can read about a million tokens at once. That's hundreds of thousands of words, roughly several long books.</p><p>Big inputs still need care. Put the documents at the top and your question at the bottom. Wrap each document in a labelled tag. Ask Claude to quote the exact lines it relies on before it answers.</p><p>These habits make it far less likely that a detail on page 300 gets missed or invented.</p>",
+  plain:"<p>Claude can read about a million tokens at once, which is roughly several long books.</p><p>Big inputs still need care. Put the documents at the top and your question at the bottom. Wrap each document in a labelled tag. Ask Claude to quote the exact lines it relies on before it answers.</p><p>These habits make it far less likely that a detail on page 300 gets missed or invented.</p>",
   map:[["The book on the table","Documents placed first"],["Sticky note on top","The question placed last"],["Chapter tabs","Labelled tags like &lt;doc 1&gt;"],["Pointing at the sentence","Quoting before concluding"]],
   breaks:"You can flip back to a page any time. Claude reads everything at once and pays uneven attention, so a buried fact can be missed even though it is technically «in view».",
   viz:{svg:lc32(true),cap:"Same documents, same question; only the order changed. Use the button to compare."},
@@ -115,7 +115,7 @@ function ev36(v){
 E["3.6"]={
   plain:"<p>When you change a prompt, how do you know it got better? Trying it once proves very little.</p><p>An <b>eval</b> is a small, fixed set of real test inputs, each with a note on what a good answer looks like. Run every version of your prompt on the same set and compare.</p><p>Look at each item, not just the total. A higher score can hide things that used to work and now break.</p>",
   map:[["The practice test","The eval set"],["The answer key","Written expectations for each input"],["Checking your study method","Comparing prompt versions on the same set"]],
-  breaks:"A practice test has one right answer per question. Many prompt outputs have several good answers, so a grader (often Claude with a strict rubric) has to judge them.",
+  breaks:"A practice test has one right answer per question. Many prompt outputs have several good answers, so a grader (often Claude with a strict rubric) has to judge them. That grader has biases of its own: it tends to favour longer answers, the answer it reads first, and its own style. Check a sample of its grades by hand.",
   viz:{svg:ev36("v1"),cap:"One square per test input. Switch versions: the total goes up, but look at which squares turned red. (The pass/fail pattern is an illustration.)"},
   play:{t:"Compare two prompt versions",inFig:1,build:function(root){
     var v="v2";root.innerHTML='<button class="wbtn" id="b36">Show v1</button><div id="v36"></div><div class="vpout" id="o36"></div>';

@@ -16,12 +16,12 @@ var E=window.EASE, VZ=window.VZ;
     {t:"Add it to\nthe text",s:"…then go round again",tone:"t"}
   ],{w:480,h:310,bh:68,stepped:true,center:"one token\nper lap",aria:"The next-token loop: read, score, pick, append, repeat"});
   E["1.1"]={
-    plain:"<p>Claude is a computer program that writes by guessing. It reads your words, then guesses the next small piece of text. It adds that piece and guesses again, thousands of times a second.</p><p>It learned to guess well by reading a huge amount of human writing. Then people trained it to be helpful, honest and careful.</p><p>The big idea: Claude does not look answers up. It makes each answer fresh, so it can be brilliant and sometimes wrong in the same sentence.</p>",
+    plain:"<p>Claude is a computer program that writes by guessing. It reads your words, guesses the next small piece of text, adds it, and guesses again, dozens of times a second.</p><p>It learned to guess well by reading a huge amount of human writing, and then people trained it to be helpful, honest and careful.</p><p>The big idea: Claude does not look answers up. It makes each answer fresh, so it can be brilliant and sometimes wrong in the same sentence.</p>",
     map:[["The friend who read every library book","The model, trained on a huge slice of human writing"],["Making up a new story word by word","Generating one token at a time"],["Picking the word that sounds most right","Choosing from probabilities for the next token"],["A made-up «fact» that sounds right","A hallucination"]],
     breaks:"A friend remembers which book a fact came from. Claude usually can't: it stores patterns, not a list of sources, unless you give it the source.",
     viz:{svg:s.svg(),cap:"The whole engine is one loop. Claude reads everything so far, scores every possible next token, picks one, appends it, and goes round again.",
       steps:["Claude reads every token you sent plus everything it has written so far.","It gives every possible next token a probability. «mat» might get 62%, «rug» 23%.","It picks one. Most of the time a likely one, sometimes a less likely one, which is why two answers to the same prompt differ.","The chosen token is added to the text, and the loop runs again until the answer is finished."]},
-    line:"Claude writes by guessing the next word over and over, so it invents answers instead of looking them up."
+    line:"Claude writes by guessing the next small piece of text over and over, so it invents answers instead of looking them up."
   };
 })();
 
@@ -40,9 +40,9 @@ var E=window.EASE, VZ=window.VZ;
   s.link({x:170,y:146,w:140,h:64,cx:240,cy:178},{x:326,y:146,w:140,h:64,cx:396,cy:178});
   s.text(W/2,232,"≈ 1.8 tokens per English word on today's models","sm");
   E["1.2"]={
-    plain:"<p>Claude does not read whole words. It cuts text into small pieces called <b>tokens</b>. On today's models one English word is about 1.8 tokens.</p><p>Everything Claude can see at one moment sits in its <b>context window</b>. That means your message, the whole chat, any files, and the answer it is writing.</p><p>The window is big (one million tokens on current models) but it is not endless. When it fills up, old material drops out and answers get worse. That is why long chats seem to «forget».</p>",
+    plain:"<p>Claude does not read whole words. It cuts text into small pieces called <b>tokens</b>, and one English word is about 1.8 tokens on today's models.</p><p>Everything Claude can see at one moment sits in its <b>context window</b>: your message, the whole chat, any files, and the answer it is writing.</p><p>The window is big (one million tokens on current models) but not endless, and answers get worse as it gets crowded. When it is full, the app has to summarise or drop older parts, which is why long chats seem to «forget». A new chat starts with an empty window.</p>",
     map:[["The desk","The context window"],["Lego bricks","Tokens"],["How many bricks fit on the desk","The token limit (1M on current models)"],["Clearing the desk and starting a fresh page","Starting a new chat with a summary"]],
-    breaks:"A real desk keeps what you put on it. When Claude's window is crowded, it can still «see» everything but pays less attention to the middle, so a full desk hurts quality before it overflows.",
+    breaks:"A real desk keeps what you put on it. When Claude's window is crowded, it can still «see» everything but can pay less attention to the middle, so a full desk hurts quality before it overflows.",
     viz:{svg:s.svg(),cap:"Top: every part of the job shares one window. Bottom: text is cut into tokens before it goes in, and each token takes room."},
     play:{t:"Fill the context window",build:function(root){
       root.innerHTML='<label class="sm">Pages of PDF attached: <b id="p12a">40</b></label><input type="range" id="r12a" min="0" max="1500" step="10" value="40">'+
@@ -74,7 +74,7 @@ var E=window.EASE, VZ=window.VZ;
   s.link(a,b,"high stakes or it fails",{bend:-34,ly:-6});s.link(a,c,"simple + many");
   s.text(W/2,252,"* Haiku 5.5 price for prompts up to 100k tokens","sm");
   E["1.3"]={
-    plain:"<p>Claude is not one model. It is a family of four, and they differ in brains, speed and price.</p><p><b>Haiku</b> is small, fast and cheap. <b>Sonnet</b> is the everyday workhorse. <b>Opus</b> is the flagship for serious work. <b>Fable</b> is the premium top tier for the hardest long jobs.</p><p>Choosing well matters because the top model can cost 100 times more per word than the cheapest. Most work belongs on Sonnet.</p>",
+    plain:"<p>Claude is not one model but a family of four, and they differ in brains, speed and price.</p><p><b>Haiku</b> is small, fast and cheap, and <b>Sonnet</b> is the everyday workhorse. <b>Opus</b> is the flagship for serious work, and <b>Fable</b> is the premium top tier for the hardest long jobs.</p><p>Choosing well matters because the top model can cost 100 times more per word than the cheapest. Most work belongs on Sonnet.</p>",
     map:[["Cycle","Haiku: quick, cheap trips in large numbers"],["Scooter","Sonnet: the everyday ride"],["Bus","Opus: carries the heavy load"],["Chartered coach","Fable: the rare, long, demanding trip"],["Fitting the vehicle to the trip","Matching the model to the task's stakes and volume"]],
     breaks:"Vehicles keep the same speed for every rider. Models don't: you can also turn up a model's thinking effort, so a cheaper model that thinks harder sometimes beats a bigger one.",
     viz:{svg:s.svg(),cap:"Bars are to scale (list prices from the pricing page, checked 3 Nov 2026). The rule below them is the habit: start on Sonnet, escalate on stakes, descend for volume."},
@@ -129,7 +129,7 @@ var E=window.EASE, VZ=window.VZ;
     return s.svg();
   }
   E["1.6"]={
-    plain:"<p>Claude sometimes says things that are false, in the same confident voice it uses for true things. This is called a <b>hallucination</b>.</p><p>It happens because Claude builds answers from patterns instead of looking them up. You can't switch it off, but you can make it harmless.</p><p>The trick is to sort every answer by two questions. What would it cost if this were wrong? Can I check it easily? Then you check the risky ones against a real source.</p>",
+    plain:"<p>Claude sometimes says things that are false, in the same confident voice it uses for true things. This is called a <b>hallucination</b>.</p><p>It happens because Claude builds answers from patterns instead of looking them up. You can't switch it off, but you can make it harmless.</p><p>The trick is to sort every answer by two questions: what would it cost if this were wrong, and can I check it easily? Then you check the risky ones against a real source.</p>",
     map:[["The confident classmate","Claude"],["«Show me where it says that»","Asking for sources and quotes"],["The textbook","A primary source you check yourself"],["Your exam notes","Anything you publish, send or act on"]],
     breaks:"A classmate who is guessing often sounds unsure. Claude's tone gives no warning, so confidence tells you nothing about truth.",
     viz:{svg:VZ.flow([

@@ -70,7 +70,7 @@ var E=window.EASE, VZ=window.VZ;
     {t:"tool_result",s:"sent back to Claude",tone:"t"}
   ],{w:400,h:300,bw:150,bh:66,stepped:true,center:"until Claude\nanswers in words",aria:"The tool-use loop between Claude and your code"});
   E["9.4"]={
-    plain:"<p><b>Tool use</b> lets Claude ask your program to do things, like look up the weather or save a record.</p><p>You describe each tool: its name, what it does, and its inputs. When Claude needs one, it stops and sends a structured request. Your code runs the real function and sends the result back. Claude then carries on.</p><p>Claude never runs anything itself. Your code stays in charge.</p>",
+    plain:"<p><b>Tool use</b> lets Claude ask your program to do things, like look up the weather or save a record.</p><p>You describe each tool: its name, what it does, and its inputs. When Claude needs one, it stops and sends a structured request. Your code runs the real function and sends the result back, and Claude carries on.</p><p>Claude never runs anything itself: your code stays in charge.</p>",
     map:[["Asking a friend to check the train times","Claude requesting a tool"],["The friend actually checking","Your code running the function"],["The friend telling you the answer","The tool_result message"]],
     breaks:"A friend can decide not to help. Your code always decides too, but only if you write the checks: validate inputs before running anything that changes data.",
     viz:{svg:s.svg(),cap:"The loop runs until Claude has what it needs and answers in plain words.",
@@ -113,7 +113,7 @@ function v96(mode){
 E["9.6"]={
   plain:"<p>Many apps send the same long beginning on every call: a big system prompt, a document, some examples. <b>Prompt caching</b> stores that beginning so later calls don't pay full price for it.</p><p>The first call writes it to the cache and costs a little extra. Later calls that reuse it within a few minutes read it for a small fraction of the price. On Sonnet 5.5 and Opus 5.5 that's 5% of the normal input price.</p><p>The <b>Batch API</b> is a separate saving: send non-urgent requests together and pay half price.</p>",
   map:[["One copy kept in the class library","The cached prefix"],["Everyone reading that copy instead of buying one","Later calls reading the cache at 5%"],["Buying the first copy","The cache write (1.25× on the first call)"]],
-  breaks:"A library copy stays on the shelf. A cached prefix expires after 5 minutes without use (or 1 hour if you pay for that), and it only works for calls in your own workspace.",
+  breaks:"A library copy stays on the shelf. A cached prefix expires after 5 minutes without use (or 1 hour if you pay for that), and it only works for calls in your own workspace. It also only matches from the very start: change one word early in the prompt and everything after that word is a fresh, full-price write.",
   viz:{cap:"Switch between the three cases. The prices are Sonnet 5.5 list prices per million tokens: input $2, cache write $2.50, cache read $0.10."},
   play:{t:"Cache hit or miss?",inFig:1,build:function(root){
     var modes=["none","miss","hit"],k=2;root.innerHTML='<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="wbtn" data-m="0">No cache</button><button class="wbtn" data-m="1">First call (miss)</button><button class="wbtn" data-m="2">Repeat call (hit)</button></div><div id="v96"></div><div class="vpout" id="o96"></div>';

@@ -62,7 +62,7 @@ var E=window.EASE, VZ=window.VZ;
   var L=[["1 · Metadata","name + description","always loaded","g"],["2 · Instructions","the SKILL.md body","on a match","a"],["3 · Scripts + files","run in a container","only if needed","v"]];
   L.forEach(function(p,i){s.box(14+i*20,14+i*76,240-i*20,62,p[0],p[1],p[3],{step:i});s.text(270,45+i*76,p[2],"sm","start",{step:i});});
   E["16.4"]={
-    plain:"<p>An <b>Agent Skill</b> is a folder with a SKILL.md file: a name, a description of when to use it, and instructions. It can also hold scripts and reference files.</p><p>Claude loads it in stages. It always sees the name and description. It reads the full instructions only when a request matches. It runs scripts only if needed.</p><p>You build it once and it works in the app, Claude Code and the API (uploaded through the Skills API).</p>",
+    plain:"<p>An <b>Agent Skill</b> is a folder with a SKILL.md file: a name, a description of when to use it, and instructions. It can also hold scripts and reference files.</p><p>Claude loads it in stages. It always sees the name and description, reads the full instructions only when a request matches, and runs scripts only if needed.</p><p>You build it once and it works in the app, Claude Code and the API (uploaded through the Skills API).</p>",
     map:[["A recipe card's title","The Skill's name and description"],["Reading the whole card","Loading the instructions"],["Getting out the special tools","Running the bundled scripts"]],
     breaks:"You pick a recipe by reading titles yourself. Claude decides from the description alone, so write it to say exactly when the Skill applies.",
     viz:{svg:s.svg(),cap:"Three levels, loaded only as deep as the task needs. This keeps many Skills cheap to have installed.",

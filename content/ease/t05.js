@@ -35,7 +35,7 @@ function v52(k){
   return s.svg();
 }
 E["5.2"]={
-  plain:"<p>Before Cowork starts, you decide two things. First, which folders it may use. It can't touch anything else.</p><p>Second, the <b>permission mode</b>. <b>Manual</b> means you approve every action. <b>Auto</b> means it works on its own, with safety checks. <b>Skip</b> means no checks at all.</p><p>Match the mode to how easy the work is to undo. Then watch its plan and progress, and step in if it drifts.</p>",
+  plain:"<p>Before Cowork starts, you decide two things. First, which folders it may use: it can't touch anything else.</p><p>Second, the <b>permission mode</b>. <b>Manual</b> means you approve every action, <b>Auto</b> means it works on its own with safety checks, and <b>Skip</b> means no checks at all.</p><p>Match the mode to how easy the work is to undo. Then watch its plan and progress, and step in if it drifts.</p>",
   map:[["The cupboards you say it may open","The folders you grant"],["«Ask me before you throw anything away»","Manual mode"],["«Go ahead, with safety checks on»","Auto mode"],["«Do whatever you like»","Skip mode"]],
   breaks:"A helper in your house can wander into other rooms. Cowork can't reach folders you didn't grant, but anything inside a granted folder is fair game, so grant narrowly.",
   viz:{cap:"Slide through the three modes and watch the gate change. The folder fence stays the same in every mode."},

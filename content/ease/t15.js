@@ -92,7 +92,7 @@ function v155(c){
 E["15.5"]={
   plain:"<p>This agent answers customer questions using only the company's own help documents.</p><p>First it finds the passages that match the question. This is called <b>RAG</b> (retrieval-augmented generation). Then it writes an answer based only on those passages and cites them.</p><p>It also judges how sure it is. If it's unsure, or the topic is sensitive, it hands the question to a person.</p>",
   map:[["A librarian who only answers from the shelf","Grounded answers from the help docs"],["Pointing to the page","The citation"],["«Let me get my manager»","Escalation"]],
-  breaks:"A librarian knows when a book is outdated. The agent trusts whatever is in the help docs, so stale docs produce confident, wrong answers.",
+  breaks:"A librarian knows when a book is outdated. The agent trusts whatever is in the help docs, so stale docs produce confident, wrong answers. Retrieval also doesn't make it «know» the docs: it only pastes a few matching passages into this one prompt, and if the right one isn't found it may answer from general knowledge. Its own sense of how sure it is runs high, so set the threshold on a test set and also escalate when no passage matches well.",
   viz:{cap:"Slide the agent's confidence. Below the threshold it escalates instead of drafting. The 70% threshold is an example you would tune."},
   play:{t:"Answer or escalate?",inFig:1,build:function(root){
     root.innerHTML='<label class="sm">Agent confidence: <b id="l155">85%</b></label><input type="range" id="r155" min="0" max="100" step="5" value="85"><div id="v155"></div>';
@@ -111,7 +111,7 @@ E["15.5"]={
     {t:"Expand",s:"next agent, same\ncustomer",tone:"v"}
   ],{w:400,h:330,bw:130,bh:72,stepped:true,center:"one account\ngrows",aria:"The sales motion for agents"});
   E["15.6"]={
-    plain:"<p>Selling an agent is different from selling a one-off job. You're selling a capability the buyer has to trust every day.</p><p>So start with the result it delivers. Show a demo on the buyer's own data. Charge a setup fee plus a monthly fee for monitoring. Send regular reports so trust is visible.</p><p>Win your first client in a business you know, then add more agents for the same client.</p>",
+    plain:"<p>Selling an agent is different from selling a one-off job. You're selling a capability the buyer has to trust every day.</p><p>So start with the result it delivers, and show a demo on the buyer's own data. Charge a setup fee plus a monthly fee for monitoring. Send regular reports so trust is visible.</p><p>Win your first client in a business you know, then add more agents for the same client.</p>",
     map:[["A gardener with a monthly contract","An agent on a retainer"],["Showing them a trimmed hedge first","A demo on their own data"],["The monthly visit report","The agent's performance report"],["Adding the lawn next season","Expanding with another agent"]],
     breaks:"A gardener's work is visible from the window. An agent's work is invisible unless you report it, so the report is part of the product.",
     viz:{svg:s.svg(),cap:"The motion is a loop: each happy account leads to the next agent.",

@@ -44,7 +44,7 @@ E["2.1"]={
   s.link(c,cg,"follow");
   s.text(200,124,"same model, different sentence","sm");
   E["2.2"]={
-    plain:"<p>Claude does what you say, not what you meant. Vague words like «better» or «short» force it to guess.</p><p>So say exactly what you want. Use numbers instead of adjectives. Say what to do rather than only what not to do. Mention who the answer is for and why.</p><p>A good test: would a smart new colleague, who knows nothing about your project, understand your message?</p>",
+    plain:"<p>Claude does what you say, not what you meant. Vague words like «better» or «short» force it to guess.</p><p>So say exactly what you want. Use numbers instead of adjectives, and say what to do rather than only what not to do. Mention who the answer is for and why.</p><p>A good test: would a smart new colleague, who knows nothing about your project, understand your message?</p>",
     map:[["«Get snacks»","A vague prompt"],["Chips you didn't want","A generic answer"],["«Two packets of salted peanuts, under ₹50»","A precise, measurable instruction"],["The shop near the gate","Context that removes guessing"]],
     breaks:"A friend shares your taste and history. Claude starts each chat knowing nothing about you, so you need even more detail than you'd give a friend.",
     viz:{svg:s.svg(),cap:"The model is the same in both rows. Only the sentence changed, and with it how much Claude had to guess."},
@@ -62,7 +62,7 @@ E["2.1"]={
   var n=s.box(14,170,110,56,"New input",null,"b",{step:3}),o=s.box(250,170,136,56,"New output","in the same shape","e",{step:3});
   s.link(n,o,"continue",{step:3});s.link(pat,o,null,{step:3,dash:1});
   E["2.3"]={
-    plain:"<p>Describing what you want is hard. Showing it is easy. If you give Claude one to five examples of «this input gives this output», it copies the pattern.</p><p>This works because Claude is a pattern-continuing machine. An example <i>is</i> a pattern.</p><p>Vary what the examples say, but keep their shape the same. Leave examples out when you want fresh, original ideas, because Claude will copy them too closely.</p>",
+    plain:"<p>Describing what you want is hard, but showing it is easy. If you give Claude one to five examples of «this input gives this output», it copies the pattern.</p><p>This works because Claude is a pattern-continuing machine. An example <i>is</i> a pattern.</p><p>Vary what the examples say, but keep their shape the same. Leave examples out when you want fresh, original ideas, because Claude will copy them too closely.</p>",
     map:[["The teacher's finished drawing","Your example output"],["Everyone's work looking closer to it","Claude matching format and tone"],["Copying the drawing too closely","Examples leaking into creative work"]],
     breaks:"Students know the example is only a guide. Claude may copy small quirks, like the length or a favourite word, so pick examples you'd be happy to see repeated.",
     viz:{svg:s.svg(),cap:"Pairs of examples become a pattern; a new input comes out in the same shape.",
@@ -92,16 +92,16 @@ E["2.1"]={
 /* ---------- 2.5 ---------- */
 var LV=["low","medium","high","xhigh","max"];
 function think25(k){
-  var s=VZ.scene(400,214,"A question goes through a thinking block whose size grows with effort, then to the answer");
+  var s=VZ.scene(450,214,"A question goes through a thinking block whose size grows with effort, then to the answer");
   var q=s.box(14,70,92,60,"Question",null,"b");
   var w=60+k*36,t=s.box(130,100-(28+k*8),w,56+k*16,"Thinking","rough paper","v");
-  var a=s.box(130+w+28>300?306:130+w+28,70,80,60,"Answer",null,"e");
+  var a=s.box(130+w+28,70,80,60,"Answer",null,"e"); // review fix: never overlaps the thinking block (was clamped at 306)
   s.link(q,t);s.link(t,a);
-  s.text(200,196,k==null?"":"effort: "+LV[k],"sm h");
+  s.text(225,196,k==null?"":"effort: "+LV[k],"sm h");
   return s.svg();
 }
 E["2.5"]={
-  plain:"<p>Some questions need working out, like a maths problem with several steps. Claude does better on those if it «thinks» before it answers.</p><p>On today's models this is built in. It's called <b>adaptive thinking</b>: Claude decides how much to think for each question. You steer it with an <b>effort</b> setting, from low to max.</p><p>More effort means better answers on hard problems, but slower and more costly ones. For easy questions, low effort is fine.</p>",
+  plain:"<p>Some questions need working out, like a maths problem with several steps. Claude does better on those if it «thinks» before it answers.</p><p>On today's models this is built in and called <b>adaptive thinking</b>: Claude decides how much to think for each question. You steer it with an <b>effort</b> setting, from low to max.</p><p>More effort means better answers on hard problems, but slower and more costly ones. For easy questions, low effort is fine.</p>",
   map:[["Rough paper in a maths test","Thinking tokens Claude writes before its answer"],["Deciding how much working to show","Adaptive thinking"],["The teacher saying «take your time on this one»","The effort setting"]],
   breaks:"You can always skip rough paper for 2 + 3. On Opus 5.5 and Fable 5.1 thinking can't be switched off; you only steer how hard Claude tries.",
   viz:{cap:"Before answering, Claude can write private working (thinking). The effort setting steers how much. Drag the slider to see the trade."},

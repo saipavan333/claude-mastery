@@ -31,7 +31,7 @@ var P102=[
 ];
 function v102(k){var s=VZ.scene(400,200,"Workflow pattern: "+P102[k][0]);P102[k][2](s);s.text(200,188,P102[k][0].toUpperCase()+": "+P102[k][1],"sm h");return s.svg();}
 E["10.2"]={
-  plain:"<p>Most useful AI systems aren't free-roaming agents. They're <b>workflows</b>: fixed plans you design, with Claude doing each step.</p><p>There are five common shapes. <b>Chaining</b> runs steps in order. <b>Routing</b> sends each input down the right path. <b>Parallel</b> runs parts at once. An <b>orchestrator</b> splits work among workers. An <b>evaluator</b> grades a draft and sends it back for fixes.</p><p>Use the simplest shape that works. Reach for a full agent only when no fixed plan will do.</p>",
+  plain:"<p>Most useful AI systems aren't free-roaming agents. They're <b>workflows</b>: fixed plans you design, with Claude doing each step.</p><p>There are five common shapes: <b>chaining</b> runs steps in order, <b>routing</b> sends each input down the right path, and <b>parallel</b> runs parts at once. An <b>orchestrator</b> splits work among workers, and an <b>evaluator</b> grades a draft and sends it back for fixes.</p><p>Use the simplest shape that works, and reach for a full agent only when no fixed plan will do.</p>",
   map:[["A kitchen line with fixed stations","A workflow"],["Each station's job","One prompt or model call"],["The head chef handing out dishes by plan","Orchestrator-workers"],["A cook who tastes and decides the next step","An agent"]],
   breaks:"In a kitchen, stations can shout to each other. In a workflow, steps only share what you pass along, so design what each step hands to the next.",
   viz:{cap:"Pick a pattern and watch the shape change. Every one keeps you in control of the plan."},
@@ -93,7 +93,7 @@ function v105(p,k){
   return s.svg();
 }
 E["10.5"]={
-  plain:"<p>An agent you can't trust is just automated risk. <b>Reliability</b> is how you earn trust.</p><p>Test it on a fixed set of real tasks (an <b>eval</b>). Add <b>guardrails</b>, hard rules it can't break. Add checks that catch mistakes. And put a person at the few points where human judgement really matters.</p><p>One number trips people up: an agent that succeeds 90% of the time fails often when it runs many times in a row.</p>",
+  plain:"<p>An agent you can't trust is just automated risk, and <b>reliability</b> is how you earn trust.</p><p>Test it on a fixed set of real tasks (an <b>eval</b>). Add <b>guardrails</b> (hard rules it can't break) and checks that catch mistakes. And put a person at the few points where human judgement really matters.</p><p>One number trips people up: an agent that succeeds 90% of the time fails often when it runs many times in a row.</p>",
   map:[["The driving test","Evals"],["The seatbelt","Guardrails"],["The adult in the passenger seat","A human approval step"],["Passing the test once vs driving safely every day","pass@k vs pass^k"]],
   breaks:"A driver who passes the test keeps the skill. An agent's success rate can drift when the model, tools or inputs change, so evals have to run again.",
   viz:{cap:"Slide the per-run success rate and the number of runs. pass^k falls fast, which is why 90% isn't good enough for daily use."},

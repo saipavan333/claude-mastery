@@ -29,7 +29,7 @@ var E=window.EASE, VZ=window.VZ;
     {t:"You read diffs",s:"what exactly changed",tone:"g"}
   ],{w:400,h:320,bw:130,bh:58,stepped:true,center:"small steps,\nevery lap",aria:"The Claude Code session loop"});
   E["7.2"]={
-    plain:"<p>A Claude Code session is a loop. You say what you want. It suggests a plan. You approve. It makes changes and runs commands. You look at exactly what changed, called the <b>diff</b>.</p><p>Start it in the right folder, ask for a plan first, and keep each step small. Those habits stop most mistakes before they happen.</p>",
+    plain:"<p>A Claude Code session is a loop. You say what you want, it suggests a plan, and you approve. It makes changes and runs commands, then you look at exactly what changed, called the <b>diff</b>.</p><p>Start it in the right folder, ask for a plan first, and keep each step small. Those habits stop most mistakes before they happen.</p>",
     map:[["Explaining the experiment","Your brief"],["The partner suggesting a step","Claude's plan"],["Saying yes or no","Approving the action"],["Writing it up together","Reviewing the diff and moving on"]],
     breaks:"A lab partner remembers yesterday. A new Claude Code session starts fresh, which is why the next lesson's CLAUDE.md file exists.",
     viz:{svg:s.svg(),cap:"Five beats, repeated. The two red and gold beats are yours.",
@@ -141,7 +141,7 @@ E["7.5"]={
   s.path("M386 156 Q398 100 386 60",{dash:1,tone:"r",step:2});s.text(372,104,"fail","sm","end");
   s.path("M99 186 V232 H301 V188",{dash:1,step:3});s.label(200,232,"next feature",{step:3});
   E["7.8"]={
-    plain:"<p>Professionals use Claude Code in one steady loop: <b>plan</b>, <b>build</b>, <b>verify</b>, <b>commit</b>.</p><p>Plan before any edits. Build in small steps you can review. Verify with real checks, like running the tests. Then commit, which means saving a described snapshot in git.</p><p>If a check fails, go back to build. Never skip verify because the code «looks right».</p>",
+    plain:"<p>Professionals use Claude Code in one steady loop: <b>plan</b>, <b>build</b>, <b>verify</b>, <b>commit</b>.</p><p>Plan before any edits, and build in small steps you can review. Verify with real checks, like running the tests. Then commit, which means saving a described snapshot in git.</p><p>If a check fails, go back to build. Never skip verify because the code «looks right».</p>",
     map:[["Plan the experiment","Plan"],["Build the setup","Build"],["Test it","Verify"],["Write it up for the judges","Commit with a clear message"]],
     breaks:"A science-fair write-up happens once. In git, every small commit is a save point you can return to, so many small commits beat one big one.",
     viz:{svg:s.svg(),cap:"Four beats; the red dashed path is the honest one: a failed check sends you back to build.",

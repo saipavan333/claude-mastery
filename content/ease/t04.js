@@ -11,7 +11,7 @@ var E=window.EASE, VZ=window.VZ;
   s.link(acc,w);s.link(acc,d);s.link(acc,m);
   s.box(14,180,372,44,"Set preferences once → better chats everywhere",null,"v",{rx:8});
   E["4.1"]={
-    plain:"<p>The Claude app runs in a web browser, as a desktop program and on your phone. It's the same Claude and the same account on all three.</p><p>Each one is good at different things. The phone has voice and the camera. The computer is better for long work with files.</p><p>Spend ten minutes in Settings once. Choices like your preferred style then improve every chat after that.</p>",
+    plain:"<p>The Claude app runs in a web browser, as a desktop program and on your phone. It's the same Claude and the same account on all three.</p><p>Each one is good at different things. The phone has voice and the camera; the computer is better for long work with files.</p><p>Spend ten minutes in Settings once. Choices like your preferred style then improve every chat after that.</p>",
     map:[["One phone","One Claude account"],["Torch, scanner, translator you never found","Features like styles, voice input and file upload"],["Setting your ringtone once","Setting preferences once in Settings"]],
     breaks:"A phone's features are all in one device. Some Claude features exist on one platform and not another, so check where a feature lives before you hunt for it.",
     viz:{svg:s.svg(),cap:"Everything hangs off one account; each platform adds its own strengths."},
