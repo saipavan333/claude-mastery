@@ -384,6 +384,21 @@ function coachBlock(L,meta){
     pblock("Prompt — coach me when I'm stuck",hint,"prompt")+
     '</div></div>';
 }
+/* pass 2: Prev/Next stepper for diagrams with steps, and the "Try it" interactive */
+function mountEase(E,v){
+  var VZD=E.viz,svg=$("#vzfig svg",v);
+  if(VZD&&VZD.steps&&svg){
+    var k=0,n=VZD.steps.length,cap=$("#vzCap",v);svg.classList.add("stepping");
+    var show=function(){$$("[data-step]",svg).forEach(function(el){var s=+el.getAttribute("data-step");
+        el.classList.toggle("on",s===k);el.classList.toggle("done",s<k)});
+      cap.innerHTML='<b>Step '+(k+1)+' of '+n+':</b> '+VZD.steps[k];
+      $("#vzPrev",v).disabled=k===0;$("#vzNext",v).textContent=k===n-1?"↺ Start over":"Next step ▶"};
+    $("#vzPrev",v).addEventListener("click",function(){if(k>0){k--;show()}});
+    $("#vzNext",v).addEventListener("click",function(){k=k===n-1?0:k+1;show()});
+    show();
+  }
+  if(E.play){var r=$("#vzplay",v);if(r)E.play.build(r)}
+}
 function renderLesson(id){
   var L=LESSONS[id],meta=FLAT[lessonIndex(id)];
   if(!L||!meta)return renderHome();
@@ -396,11 +411,34 @@ function renderLesson(id){
      '<div class="meta-row"><span class="pill">Track '+t.n+' · Lesson '+id+'</span><span class="pill">~'+meta.min+' min</span>'+
      '<span class="pill"><span class="lvl '+t.level+'">'+t.level+'</span></span>'+
      (L.asOf?verifiedBadge():'')+'</div></div>';
+  var E=(window.EASE||{})[id],D=DIAGRAMS[id];
+  if(E){ // pass 2: simple first (plain opening, everyday picture, mechanism diagram), then the full depth
+    h+='<section class="ease">';
+    if(E.plain)h+='<div class="plain rv"><h2>Start here</h2>'+E.plain+'</div>';
+    var an=E.an||L.kid;
+    if(an){h+='<div class="kid rv"><b>Everyday picture:</b> '+an;
+      if(E.map&&E.map.length){h+='<table class="amap"><tr><th>In the picture</th><th>In the real thing</th></tr>';
+        E.map.forEach(function(r){h+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'});h+='</table>'}
+      if(E.breaks)h+='<p class="abreak"><b>Where the picture breaks:</b> '+E.breaks+'</p>';
+      h+='</div>'}
+    var VZD=E.viz||D,inF=E.play&&E.play.inFig;
+    if(inF)h+='<figure class="diagram vzfig rv" id="vzfig"><div class="vzpad"><div class="vph vzin"><b>'+esc(E.play.t)+'</b><span>TRY IT</span></div><div id="vzplay"></div></div>'+(VZD&&VZD.cap?'<figcaption>'+VZD.cap+'</figcaption>':'')+'</figure>';
+    else if(VZD)h+='<figure class="diagram vzfig rv" id="vzfig"><div class="vzpad">'+VZD.svg+'</div>'+
+      (VZD.steps?'<div class="vzctl"><button class="wbtn" id="vzPrev">◀ Back</button><button class="wbtn" id="vzNext">Next step ▶</button><div class="vzcap" id="vzCap"></div></div>':'')+
+      (VZD.cap?'<figcaption>'+VZD.cap+'</figcaption>':'')+'</figure>';
+    if(E.play&&!inF)h+='<div class="vzplay rv"><div class="vph"><b>'+esc(E.play.t)+'</b><span>TRY IT</span></div><div id="vzplay"></div></div>';
+    h+='</section><div class="deeper-h"><h2>Going deeper</h2><p>The full lesson: the precise version, worked examples, the lab and the quiz.</p></div>';
+    if(L.breath)h+='<div class="breath rv"><b>In one breath:</b> '+L.breath+'</div>';
+    if(L.hook)h+='<div class="sec rv">'+L.hook+'</div>';
+    if(L.video)h+=videoBlock(L.video);
+    if(E.viz&&D)h+='<figure class="diagram rv">'+D.svg+(D.cap?'<figcaption>'+D.cap+'</figcaption>':'')+'</figure>';
+  } else {
   if(L.breath)h+='<div class="breath rv"><b>In one breath:</b> '+L.breath+'</div>';
+  if(L.kid)h+='<div class="kid rv"><b>School-kid picture:</b> '+L.kid+'</div>';
   if(L.hook)h+='<div class="sec rv">'+L.hook+'</div>';
   if(L.video)h+=videoBlock(L.video);
-  var D=DIAGRAMS[id];
   if(D)h+='<figure class="diagram rv">'+D.svg+(D.cap?'<figcaption>'+D.cap+'</figcaption>':'')+'</figure>';
+  }
   (L.secs||[]).forEach(function(s){h+='<div class="sec rv"><h2>'+esc(s.h)+'</h2>'+s.b+'</div>'});
   var W=WIDGETS[id];
   if(W)h+='<div class="widget rv" id="wmount"><div class="wh"><b>'+esc(W.t)+'</b><span class="tag">INTERACTIVE LAB</span></div>'+
@@ -421,6 +459,7 @@ function renderLesson(id){
       (p.tag==="stretch"?"STRETCH":p.tag==="transfer"?"TRANSFER":"WARM-UP")+'</span>'+p.q+'</summary><div class="sol">'+p.sol+'</div></details>'});
     h+='</div>'}
   if(L.recap)h+='<div class="recap rv"><b>Pocket recap:</b> '+L.recap+'</div>';
+  if(E&&E.line)h+='<div class="oneline rv"><b>In one line:</b> '+E.line+'</div>';
   if(L.review)h+='<div class="callout note rv"><b>🔁 Quick rewind:</b> '+L.review+'</div>';
   if(L.deep)h+='<details class="deep rv"><summary>Deep dive — for the curious</summary><div class="deepb">'+L.deep+'</div></details>';
   // done bar + nav
@@ -472,6 +511,7 @@ function renderLesson(id){
       b.textContent="copied ✓";setTimeout(function(){b.textContent="copy"},1600)});
   })});
   // widget
+  if(E){try{mountEase(E,v)}catch(e){console.warn("diagram mount",e)}}
   if(W){try{W.build($("#wroot"))}catch(e){var wr=$("#wroot");if(wr)wr.innerHTML='<p class="wnote">This lab needs a modern browser with canvas support. ('+esc(e.message)+')</p>'}}
   // done button
   $("#doneBtn").addEventListener("click",function(){
@@ -558,7 +598,7 @@ function readAloud(root){
   var speaking=false,queue=[],qi=0,keep=null;
   function collect(){
     var art=$("article.lesson");var els=[];
-    $$(".breath, .sec p, .sec li, .wkb .nar, .recap, .mist li",art).forEach(function(el){
+    $$(".plain p, .breath, .kid, .sec p, .sec li, .oneline, .wkb .nar, .recap, .mist li",art).forEach(function(el){
       if(el.closest(".widget,.quiz,.pblock,pre"))return;
       var t=el.textContent.replace(/\s+/g," ").trim();
       if(t.length>8)els.push({el:el,t:t});
@@ -603,7 +643,13 @@ function renderLabs(){
     h+='<a class="lab-card rv" href="#lesson/'+l.id+'"><b>'+esc(W.t)+'</b><p>'+esc(W.short||W.guide.replace(/<[^>]+>/g,"").slice(0,110))+'…</p>'+
        '<span class="in">In lesson '+l.id+' · '+esc(l.title)+'</span></a>';
   });
-  h+='</div></div>';
+  h+='</div>';
+  // pass 2: the smaller "Try it" interactives that live in each lesson's opening
+  var EZ=window.EASE||{},tries=FLAT.filter(function(l){return EZ[l.id]&&EZ[l.id].play});
+  if(tries.length){h+='<div class="page-h" style="margin-top:34px"><h2>Quick try-its</h2><p>'+tries.length+' small interactives at the top of their lessons: move a slider or press a button and watch the mechanism change.</p></div><div class="lab-grid">';
+    tries.forEach(function(l){h+='<a class="lab-card rv" href="#lesson/'+l.id+'"><b>'+esc(EZ[l.id].play.t)+'</b><p>'+esc((EZ[l.id].line||"").slice(0,110))+'</p><span class="in">In lesson '+l.id+' · '+esc(l.title)+'</span></a>'});
+    h+='</div>'}
+  h+='</div>';
   v.innerHTML=h;reveal(v);
 }
 
@@ -1104,9 +1150,10 @@ function renderStart(){
 
 /* ---------- COMMAND PALETTE ---------- */
 /* full text of a lesson (stripped) for the search index */
-function lessonText(L){
+function lessonText(L,lid){
   if(!L)return "";
-  var p=[L.sub,L.breath,L.hook];
+  var E0=(window.EASE||{})[lid]||{};
+  var p=[L.sub,E0.plain,L.breath,E0.an||L.kid,E0.breaks,E0.line,L.hook];
   (L.secs||[]).forEach(function(s){p.push(s.h,s.b)});
   if(L.worked)p.push(L.worked.t,L.worked.html);
   if(L.lab)p.push(L.lab.html,L.lab.expect);
@@ -1125,7 +1172,7 @@ function palette(){
   pal.setAttribute("role","dialog");pal.setAttribute("aria-modal","true");pal.setAttribute("aria-label","Search the course");
   inp.setAttribute("aria-label","Search lessons, content, terms and cheat sheets");
   res.setAttribute("role","listbox");
-  FLAT.forEach(function(l){var body=lessonText(LESSONS[l.id]);idx.push({t:l.id+" · "+l.title,s:"Track "+l.tn,href:"#lesson/"+l.id,body:body.toLowerCase(),full:body})});
+  FLAT.forEach(function(l){var body=lessonText(LESSONS[l.id],l.id);idx.push({t:l.id+" · "+l.title,s:"Track "+l.tn,href:"#lesson/"+l.id,body:body.toLowerCase(),full:body})});
   GLOSSARY.forEach(function(g){idx.push({t:g.t,s:"glossary",href:"#glossary/"+encodeURIComponent(g.t),body:(g.d||"").toLowerCase(),full:g.d||""})});
   CHEATSHEETS.forEach(function(c){idx.push({t:c.title,s:"cheat sheet",href:"#cheats/"+c.tid})});
   [["Labs hub","#labs"],["Progress","#progress"],["Current facts","#current"],["The essential path","#spine"],["Interview bank","#interview"],["Daily review","#cards"],["Start here","#start"],["Your certificate","#cert"],["Trust & method","#trust"],["Showcase","#showcase"],["Prompt Pack (download)","#progress"]].forEach(function(x){idx.push({t:x[0],s:"page",href:x[1]})});

@@ -18,7 +18,7 @@ window.LESSONS = window.LESSONS || {};
 window.COURSE = {
   name: "Claude Mastery",
   tagline: "Zero to Operator — the complete course on Claude",
-  version: "1.2 · October 2026",
+  version: "1.3 · November 2026",
   phases: [
     { id: "A", name: "Foundations", blurb: "How Claude actually works — the mental model everything else stands on." },
     { id: "B", name: "The Craft", blurb: "Prompting: the highest-leverage skill of the decade." },
@@ -57,7 +57,7 @@ window.TRACKS = [
     blurb: "Chaining, long-context strategy, structured extraction, hallucination defenses, reusable templates, and evaluating prompts like an engineer.",
     lessons: [
       { id: "3.1", title: "Prompt Chaining: Divide and Conquer", min: 15 },
-      { id: "3.2", title: "Long-Context Mastery: 200K Tokens Without Tears", min: 15 },
+      { id: "3.2", title: "Long-Context Mastery: A Million Tokens Without Tears", min: 15 },
       { id: "3.3", title: "Prefilling & Structured Extraction", min: 14 },
       { id: "3.4", title: "Hallucination Defenses: Engineering for Truth", min: 15 },
       { id: "3.5", title: "Prompt Templates: Build Once, Run Forever", min: 13 },

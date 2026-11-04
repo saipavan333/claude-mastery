@@ -154,6 +154,10 @@ img,svg,canvas{max-width:100%}
   background:linear-gradient(120deg,rgba(255,138,84,.10),rgba(255,210,77,.05));border:1px solid var(--line2)}
 .breath::before{content:"☄";position:absolute;left:18px;top:14px;font-size:22px}
 .breath b{color:var(--ember2);font-family:var(--disp);letter-spacing:.02em}
+.kid{position:relative;border-radius:var(--r2);padding:16px 20px 16px 56px;margin:-8px 0 20px;
+  background:linear-gradient(120deg,rgba(79,214,181,.10),rgba(106,168,255,.05));border:1px solid var(--line2)}
+.kid::before{content:"🎒";position:absolute;left:18px;top:13px;font-size:20px}
+.kid b{color:var(--teal);font-family:var(--disp);letter-spacing:.02em}
 .sec{margin:34px 0}
 .sec>h2{font-size:22px;margin:0 0 12px;padding-left:14px;border-left:4px solid var(--ember);border-radius:2px}
 .sec>h3{font-size:17px;margin:20px 0 8px;color:var(--ember2)}
@@ -166,6 +170,8 @@ table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
 th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
 th{background:var(--bg2);font-family:var(--disp);font-size:13px;letter-spacing:.03em;color:var(--ember2)}
 tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+/* narrow screens: wide tables scroll sideways inside the lesson instead of being clipped */
+@media (max-width:720px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}th,td{padding:8px 10px}}
 .callout{border-radius:var(--r);padding:15px 18px;margin:16px 0;border:1px solid;font-size:14.5px}
 .callout b:first-child{font-family:var(--disp)}
 .callout.tip{border-color:rgba(79,214,181,.35);background:rgba(79,214,181,.07)}
@@ -576,3 +582,70 @@ kbd{border:1px solid var(--line2);border-bottom-width:2px;border-radius:6px;padd
   body{background:#fff;color:#1a1410}
   #app{display:block}
 }
+
+/* ---------- PASS 2 (2026-11-04): simple-first opening + mechanism diagrams ---------- */
+.ease{margin:18px 0 8px}
+.plain{border-radius:var(--r2);padding:18px 20px;margin:18px 0;background:linear-gradient(150deg,rgba(79,214,181,.08),rgba(106,168,255,.05));border:1px solid rgba(79,214,181,.3)}
+.plain h2{margin:0 0 8px;font-family:var(--disp);font-size:19px;color:var(--teal)}
+.plain p{margin:0 0 8px;font-size:16.5px;line-height:1.7}
+.plain p:last-child{margin-bottom:0}
+.kid .amap{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:14px}
+.kid .amap th{text-align:left;color:var(--mut);font-weight:600;font-size:12px;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-bottom:1px solid var(--line2)}
+.kid .amap td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.kid .amap td:first-child{color:var(--ember2);width:44%}
+.kid .abreak{margin:10px 0 0;font-size:14px;color:var(--mut)}
+.kid .abreak b{color:var(--rose)}
+.vzfig{background:var(--bg1)}
+.vzfig .vzpad{padding:12px 10px 6px}
+.vzfig .vzpad .vz,.vzplay .vz{margin:0 auto}
+.vz{display:block;width:100%;height:auto;font-family:var(--sans);overflow:visible}
+.vz .tx{fill:var(--ink);font-size:15px}
+.vz .tx.b{font-weight:650}
+.vz .sm{fill:var(--mut);font-size:13px}
+.vz .sm.h{fill:var(--ember2);font-size:13px;font-weight:700;letter-spacing:.04em}
+.vz .sm.c{fill:var(--ember2);font-size:13px;font-weight:650}
+.vz .sm.l{fill:var(--ink)}
+.vz .vzb rect{fill:var(--bg3);stroke:var(--line2);stroke-width:1.4}
+.vz .k-a rect,.vz rect.k-a{fill:color-mix(in srgb,var(--ember) 16%,var(--bg2));stroke:var(--ember)}
+.vz .k-t rect,.vz rect.k-t{fill:color-mix(in srgb,var(--teal) 14%,var(--bg2));stroke:var(--teal)}
+.vz .k-b rect,.vz rect.k-b{fill:color-mix(in srgb,var(--blue) 15%,var(--bg2));stroke:var(--blue)}
+.vz .k-g rect,.vz rect.k-g{fill:color-mix(in srgb,var(--gold) 13%,var(--bg2));stroke:var(--gold)}
+.vz .k-v rect,.vz rect.k-v{fill:color-mix(in srgb,var(--violet) 15%,var(--bg2));stroke:var(--violet)}
+.vz .k-r rect,.vz rect.k-r{fill:color-mix(in srgb,var(--rose) 15%,var(--bg2));stroke:var(--rose)}
+.vz .k-e rect,.vz rect.k-e{fill:color-mix(in srgb,var(--green) 14%,var(--bg2));stroke:var(--green)}
+.vz .vza{fill:none;stroke:var(--mut);stroke-width:1.7}
+.vz .vza.dash{stroke-dasharray:5 5}
+.vz .vza.k-a{stroke:var(--ember)}.vz .vza.k-t{stroke:var(--teal)}.vz .vza.k-r{stroke:var(--rose)}.vz .vza.k-g{stroke:var(--gold)}
+.vz .vzh{fill:var(--mut)}
+.vz .vzl rect{fill:var(--bg1);stroke:var(--line);stroke-width:1}
+.vz .vzbar .tr{fill:var(--bg3)}
+.vz .vzbar.k-t .fl{fill:var(--teal)}.vz .vzbar.k-a .fl{fill:var(--ember)}.vz .vzbar.k-b .fl{fill:var(--blue)}
+.vz .vzbar.k-n .fl{fill:var(--dim)}.vz .vzbar.k-g .fl{fill:var(--gold)}.vz .vzbar.k-v .fl{fill:var(--violet)}.vz .vzbar.k-r .fl{fill:var(--rose)}.vz .vzbar.k-e .fl{fill:var(--green)}
+.vz.stepping [data-step]{opacity:.32;transition:opacity .25s}
+.vz.stepping [data-step].done{opacity:.62}
+.vz.stepping [data-step].on{opacity:1}
+.vz.stepping .vzb.on rect{stroke-width:2.6}
+.vzctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:8px 14px 12px}
+.vzctl .vzcap{flex:1 1 220px;font-size:14px;color:var(--ink);min-height:2.6em}
+.vzctl .vzcap b{color:var(--ember2)}
+.vzplay{margin:18px 0;border-radius:var(--r2);border:1px solid var(--line2);background:var(--bg1);padding:14px 16px}
+.vzplay .vph{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.vzfig .vzin{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 8px 8px}
+.vzfig .vzin b{font-family:var(--disp);color:var(--ink)}
+.vzfig .vzin span{font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid rgba(79,214,181,.4);border-radius:999px;padding:2px 9px}
+#vzfig #vzplay{padding:0 8px 6px}#vzfig input[type=range]{width:100%;accent-color:var(--ember)}#vzfig .vpout{font-size:14px;color:var(--ink);margin-top:6px}#vzfig .vpout b{color:var(--ember2)}
+.vzplay .vph b{font-family:var(--disp);color:var(--ink)}
+.vzplay .vph span{font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid rgba(79,214,181,.4);border-radius:999px;padding:2px 9px}
+.vzplay input[type=range]{width:100%;accent-color:var(--ember)}
+.vzplay .vpout{font-size:14px;color:var(--ink);margin-top:6px}
+.vzplay .vpout b{color:var(--ember2)}
+.deeper-h{margin:34px 0 6px;padding-top:18px;border-top:1px dashed var(--line2)}
+.deeper-h h2{margin:0;font-family:var(--disp);font-size:22px}
+.deeper-h p{margin:4px 0 0;color:var(--mut);font-size:14px}
+.oneline{margin:22px 0;padding:14px 18px;border-radius:var(--r2);border:1px solid rgba(255,180,84,.35);background:rgba(255,180,84,.07);font-size:16px}
+.oneline b{color:var(--ember2);font-family:var(--disp)}
+@media (max-width:560px){.vzfig .vzpad{padding:8px 0 4px}.vzplay{padding:12px 10px}.plain p{font-size:16px}.kid .amap{font-size:13px}}
+/* pass-2 review: phone legibility (content/legible.js) — a figure whose labels would fall under 9 px scrolls sideways */
+.lg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.lg-scroll>svg{max-width:none!important}
+.lg-scrolling::after{content:"swipe sideways to see the whole diagram \2192";display:block;position:sticky;left:0;font-size:12px;color:var(--mut);padding:4px 12px 6px}
